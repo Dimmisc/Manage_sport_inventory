@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <div class="Start-Main-Menu">
+            <div>Школа им. Пупкина</div>
+            <div>
+                <div>
+                    <h3>Аккаунт</h3>
+                </div>
+                {{% if User == logged %}}
+                <div>
+                    <p>{{ User.Surname }} {{ User.Name }} {{ User.Patronymic }}</p>
+                </div>
+                {{% else %}}
+                <div>
+                    <a href="{{ url_for('autorisation') }}"> Авторизоваться</a>
+                </div>
+                {{% endif %}}
+            </div>
+        </div>
+        <div>
+            <H1>Доступное оборудование:</H1>
+        </div>
+        <!-- Vill be avalible
+         <div>
+            <div>
+                <h1>Тип:</h1>
+            </div>
+         </div>-->
+            <ul>
+            {{% for item in inventory %}} # 
+                <div><img src="{{ item.image_href }}"></div>
+                    <div>
+                        {{ item.name }}
+                    </div>
+                    <div>
+                        <a href="/order/{{ item.id }}">Заказать</a>
+                    </div>
+                </div>
+            {{% endfor %}}
+            </ul>
+        </div>
+    </body>
+</html>
