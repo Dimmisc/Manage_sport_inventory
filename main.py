@@ -23,6 +23,12 @@ login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 
 
+def index_prod_info():
+    db_sess = db_session.create_session()
+    asor = db_sess.query(Asortiment).all()
+    return render_template("index.html", news=asor) #Создай новый html документ
+    
+
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = db_session.create_session()
@@ -114,11 +120,6 @@ def index():
     else:
         news = db_sess.query(News)
     return render_template("index.html", news=news)
-    
-def index_prod_info():
-    db_sess = db_session.create_session()
-    asor = db_sess.query(Asortiment).all()
-    return render_template("index.html", news=asor) #Создай новый html документ
 
 
 @app.route('/register', methods=['GET', 'POST'])
