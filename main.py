@@ -69,7 +69,10 @@ def add_news():
         db_sess.merge(current_user)
         db_sess.commit()
         return redirect('/')
-    return render_template('news.html', title='Добавление новости', form=form)
+    return render_template('news.html',
+                           title='Добавление новости',
+                           form=form
+                           )
 
 
 @app.route('/news_delete/<int:id>', methods=['GET', 'POST'])
@@ -83,6 +86,13 @@ def news_delete(id):
     else:
         abort(404)
     return redirect('/')
+
+@app.route('/item/<int:id_item>', methods=['GET','POST'])
+@login_required
+def item_request(id_item):
+    db_sess = db_session.create_session()
+    form_item = db.query(News).filter(News.id == id_item).first()
+    return render_template('RequestPage.html', form=form_item)
 
 
 @app.route('/news/<int:id>', methods=['GET', 'POST'])
@@ -109,7 +119,10 @@ def edit_news(id):
             return redirect('/')
         else:
             abort(404)
-    return render_template('news.html', title='Редактирование новости', form=form)
+    return render_template('news.html',
+                           title='Редактирование новости',
+                           form=form
+                           )
 
 
 @app.route("/")
@@ -127,22 +140,30 @@ def reqister():
     form = RegisterForm()
     if form.validate_on_submit():
         if form.password.data != form.password_again.data:
-            return render_template('register.html', title='Регистрация', form=form,
-                                   message="Пароли не совпадают")
+            return render_template('register.html',
+                                   title='Регистрация',
+                                   form=form,
+                                   message="Пароли не совпадают"
+                                   )
         db_sess = db_session.create_session()
         if db_sess.query(User).filter(User.email == form.email.data).first():
-            return render_template('register.html', title='Регистрация', form=form,
-                                   message="Такой пользователь уже есть")
-        user = User(
-            name=form.name.data,
-            email=form.email.data,
-            about=form.about.data
-        )
+            return render_template('register.html',
+                                   title='Регистрация',
+                                   form=form,
+                                   message="Такой пользователь уже есть"
+                                   )
+        user = User(name=form.name.data,
+                    email=form.email.data,
+                    about=form.about.data
+                    )
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
         return redirect('/login')
-    return render_template('register.html', title='Регистрация', form=form)
+    return render_template('register.html',
+                           title='Регистрация',
+                           form=form
+                           )
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -154,8 +175,14 @@ def login():
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
             return redirect("/")
-        return render_template('login.html', message="Неправильный логин или пароль", form=form)
-    return render_template('login.html', title='Авторизация', form=form)
+        return render_template('login.html',
+                               message="Неправильный логин или пароль",
+                               form=form
+                               )
+    return render_template('login.html',
+                           title='Авторизация',
+                           form=form
+                           )
 
 
 if __name__ == '__main__':
