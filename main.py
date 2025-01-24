@@ -114,6 +114,11 @@ def index():
     else:
         news = db_sess.query(News)
     return render_template("index.html", news=news)
+    
+def index_prod_info():
+    db_sess = db_session.create_session()
+    asor = db_sess.query(Asortiment).all()
+    return render_template("index.html", news=asor) #Создай новый html документ
 
 
 @app.route('/register', methods=['GET', 'POST'])
