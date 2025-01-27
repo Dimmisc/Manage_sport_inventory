@@ -9,9 +9,7 @@ from forms.user import RegisterForm, LoginForm
 from data.news import Asortiment
 from data.users import Users
 from data import db_session
-# 
-# 
-# 
+
 UPLOAD_FOLDER = 'static/images'
 
 NewsForm = AsortimentForm
@@ -50,17 +48,23 @@ def main():
 
 
 @app.route('/news', methods=['GET', 'POST'])
-@login_required
 def add_news():
-    form = NewsForm()
-    if form.validate_on_submit():
+    user = current_user
+    form = LoginForm()
+    
+    if user.is_authenticated:
+
+    else:
+
+    form_item = NewsForm()
+    if form_item.validate_on_submit():
         db_sess = db_session.create_session()
         news = News()
-        news.title = form.name.data
-        news.content = form.status.data
-        news.is_private = form.arend.data
+        news.title = form_item.name.data
+        news.content = form_item.status.data
+        news.is_private = form_item.arend.data
 
-        img_file = secure_filename(form.photo_hrev.data.filename)
+        img_file = secure_filename(form_item.photo_hrev.data.filename)
         print(img_file)
         path = os.path.join(app.config['UPLOAD_FOLDER'], img_file)
         print(path)
@@ -73,7 +77,9 @@ def add_news():
         return redirect('/')
     return render_template('news.html',
                            title='Добавление новости',
-                           form=form
+                           form_items=form_item,
+                           form_user=user
+
                            )
 
 
@@ -93,7 +99,7 @@ def news_delete(id):
 @login_required
 def item_request(id_item):
     db_sess = db_session.create_session()
-    form_item = db.query(News).filter(News.id == id_item).first()
+    form_item = db_sess.query(News).filter(News.id == id_item).first()
     return render_template('RequestPage.html', form=form_item)
 
 
