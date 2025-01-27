@@ -9,7 +9,9 @@ from forms.user import RegisterForm, LoginForm
 from data.news import Asortiment
 from data.users import Users
 from data import db_session
-
+# 
+# 
+# 
 UPLOAD_FOLDER = 'static/images'
 
 NewsForm = AsortimentForm
