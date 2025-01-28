@@ -1,8 +1,11 @@
-from flask_wtf import FlaskForm
-from flask_wtf.file import FileField
-from wtforms import StringField, TextAreaField, BooleanField, SubmitField
-from wtforms.validators import DataRequired
+import datetime
+import sqlalchemy
+from sqlalchemy import orm, create_engine
+from sqlalchemy.orm import Session
+from .db_session import SqlAlchemyBase
 
+sqlite_database = "sqlite:///blogs.db"
+engine = create_engine(sqlite_database, echo=True)
 
 class AsortimentForm(FlaskForm):
     name = StringField('Название', validators=[DataRequired()])
