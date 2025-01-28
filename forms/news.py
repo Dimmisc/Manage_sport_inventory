@@ -18,4 +18,18 @@ class RecuestForm(FlaskForm):
     description = TextAreaField('Причина аренды')
     datetime_start = DateField('Начало аренды')
     datetime_end = DateField('Окончание аренды')
+
+    def date_check(self):
+        with Session(autoflush=False, bind=engine) as db:
+            # получение всех объектов
+            dates = db.query(Request).all()
+            for p in dates:
+                if self.datetime_start > p.datetime_start and self.datetime_start < p.datetime_end and self.datetime_end < p.datetime_end and self.datetime_end > p.datetime_start:
+                    return False
+                if self.datetime_start < p.datetime_start and self.datetime_start < p.datetime_end and self.datetime_end < p.datetime_end and self.datetime_end > p.datetime_start:
+                    return False
+                if self.datetime_start > p.datetime_start and self.datetime_start < p.datetime_end and self.datetime_end > p.datetime_end and self.date_end > p.datetime_start:
+                    return False
+                else:
+                    return True
     
