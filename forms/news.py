@@ -13,6 +13,7 @@ class AsortimentForm(FlaskForm):
     submit = SubmitField("Применить")
 
 class RecuestForm(FlaskForm):
+    id_user = IntegerField('Id пользователя')
     id_item = IntegerField('Id товара')
     description = TextAreaField('Причина аренды')
     datetime_start = DateField('Начало аренды')
