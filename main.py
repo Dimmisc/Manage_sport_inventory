@@ -22,6 +22,10 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 
+def index_time_reg():
+    db_sess = db_session.create_session()
+    asor = db_sess.query(Request).all()
+    return render_template("index.html", news=asor) #Создай новый html документ
 
 def index_prod_info():
     db_sess = db_session.create_session()
