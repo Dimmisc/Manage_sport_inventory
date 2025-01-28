@@ -9,6 +9,8 @@ from forms.user import RegisterForm, LoginForm
 from data.news import Asortiment
 from data.users import Users
 from data import db_session
+from sqlalchemy.orm import Session
+from sqlalchemy import create_engine
 
 UPLOAD_FOLDER = 'static/images'
 
@@ -16,11 +18,27 @@ NewsForm = AsortimentForm
 News = Asortiment
 User = Users
 
+sqlite_database = "sqlite:///blogs.db"
+engine = create_engine(sqlite_database, echo=True)
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+
+def date_check(date_start, date_end):
+    with Session(autoflush=False, bind=engine) as db:
+        # получение всех объектов
+        dates = db.query(Request).all()
+        for p in dates:
+            if date_start > p.date_start and date_start < p.date_end and date_end < p.date_end and date_end > p.date_start:
+                return False
+            if date_start < p.date_start and date_start < p.date_end and date_end < p.date_end and date_end > p.date_start:
+                return False
+            if date_start > p.date_start and date_start < p.date_end and date_end > p.date_end and date_end > p.date_start:
+                return False
+            else:
+                return True
 
 def index_time_reg():
     db_sess = db_session.create_session()
