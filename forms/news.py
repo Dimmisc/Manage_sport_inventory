@@ -11,3 +11,8 @@ class AsortimentForm(FlaskForm):
     arend = BooleanField("Состояние аренды")
     photo_hrev = FileField('Изображение')
     submit = SubmitField("Применить")
+
+class RecuestForm(FlaskForm):
+    description = TextAreaField('Причина аренды')
+    datetime_start = DateField('Начало аренды')
+    datetime_end = DateField('Окончание аренды')
