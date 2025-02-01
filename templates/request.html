@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container form-container">
+        <h1 class="text-center">Заполнение формы инвентаря</h1>
+
+        <!-- Display the uploaded image -->
+<!--        <div class="text-center mb-4">-->
+<!--            <img src="{{ url_for('static', filename='1738059215226gp0b5nbs.png') }}" alt="Инвентарь Фото" style="max-width: 100%;">-->
+<!--        </div>-->
+        <div>
+            {{ item.name }}
+        </div>
+        <p> Описание товара </p>
+        <div>
+            {{ form.description }}
+        </div>
+        <form method="POST">
+
+            <div class="mb-3">
+                {{ form.datetime_start.label(class="form-label") }}
+                {{ form.datetime_start(class="form-control") }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.datetime_end.label(class="form-label") }}
+                {{ form.datetime_end(class="form-control") }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.description.label(class="form-label") }}
+                {{ form.description(class="form-control") }}
+            </div>
+
+            <div class="text-center">
+                {{ form.submit(type="submit", class="btn btn-custom") }}
+            </div>
+        </form>
+    </div>
+{% endblock %}
