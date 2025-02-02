@@ -11,7 +11,6 @@ from sqlalchemy import create_engine
 from data import db_session
 
 UPLOAD_FOLDER = 'static/images'
-
 sqlite_database = "sqlite:///blogs.db"
 engine = create_engine(sqlite_database, echo=True)
 app = Flask(__name__)
@@ -19,6 +18,8 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+login_manager.login_view = 'login'
+
 
 def Check_free(date_start, date_end):
     with Session(autoflush=False, bind=engine) as db:
@@ -35,6 +36,11 @@ def Check_free(date_start, date_end):
                 return True
 
 
+def main():
+    db_session.global_init("db/blogs.db")
+    app.run(debug=True)
+
+
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = db_session.create_session()
@@ -46,11 +52,6 @@ def load_user(user_id):
 def logout():
     logout_user()
     return redirect("/")
-
-
-def main():
-    db_session.global_init("db/blogs.db")
-    app.run(debug=True)
 
 
 @app.route('/news', methods=['GET', 'POST'])
@@ -123,26 +124,34 @@ def edit_news(id_item):
                            )
 
 
-# @app.route("/admin_panel")
-# @login_required
-# def admin_panel():
-#     db_sess = db_session.create_session()
-#     # user = db_sess.query(Users).filter_by(id=current_user)
-#     # if user.
+@app.route("/admin_panel")
+@login_required
+def admin_panel():
+    db_sess = db_session.create_session()
+    user = db_sess.query(Users).filter_by(id=current_user)
+    if user.user_acces == "admin":
+        items = db_sess.query(Asortiment).all()
+        requests = db_sess.query(Request).all()
+        users = db_sess.query(Users).all()
+        return render_template("admin_panel.html", items=items, requests=requests, users=users, title="Управление сайтом")
+    else:
+        return redirect("/")
 
+    
 @app.route("/")
 def index():
     db_sess = db_session.create_session()
+    user = db_sess.query(Users).filter_by(id=current_user)
     if current_user.is_authenticated:
         news = db_sess.query(Asortiment).filter((Asortiment.users == current_user) | (Asortiment.is_private != True))
     else:
         news = db_sess.query(Asortiment).filter(Asortiment.is_private != True)
-    return render_template("index.html", news=news)
+    return render_template("index.html", news=news, user=user)
 
-def index_prod_info():
-    db_sess = db_session.create_session()
-    asor = db_sess.query(Asortiment).all()
-    return render_template("index.html", news=asor) #Создай новый html документ
+# def index_prod_info():
+#     db_sess = db_session.create_session()
+#     asor = db_sess.query(Asortiment).all()
+#     return render_template("index.html", news=asor) #Создай новый html документ
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -162,12 +171,11 @@ def reqister():
                                    form=form,
                                    message= "Такой пользователь уже есть",
                                    )
-        user = Users(
-            name=form.name.data,
-            email=form.email.data,
-            about=form.about.data,
-            password=form.password.data,
-        )
+        user = Users(name=form.name.data,
+                     email=form.email.data,
+                     about=form.about.data,
+                     password=form.password.data,
+                     )
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
