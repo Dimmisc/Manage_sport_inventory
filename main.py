@@ -34,10 +34,6 @@ def Check_free(date_start, date_end):
                 return False
             else:
                 return True
-# def make_admin(email):
-#     db_sess = db_session.create_session()
-#     user = db_sess.query(Users).filter_by(email=email)
-#     db_sess.
 
 
 def main():
@@ -56,30 +52,6 @@ def load_user(user_id):
 def logout():
     logout_user()
     return redirect("/")
-
-
-@app.route('/news', methods=['GET', 'POST'])
-@login_required
-def add_news():
-    form = AsortimentForm()
-    if form.validate_on_submit():
-        db_sess = db_session.create_session()
-        news = Asortiment()
-        news.title = form.name.data
-        news.content = form.status.data
-        news.is_private = form.arend.data
-        img_file = secure_filename(form.photo_hrev.data.filename)
-        print(img_file)
-        path = os.path.join(app.config['UPLOAD_FOLDER'], img_file)
-        print(path)
-        form.photo_hrev.data.save(path)
-        #img_file.save(path)
-        news.image = path
-        current_user.news.append(news)
-        db_sess.merge(current_user)
-        db_sess.commit()
-        return redirect('/')
-    return render_template('news.html', title='Добавление новости', form=form)
 
 
 @app.route('/news_delete/<int:id>', methods=['GET', 'POST'])
@@ -139,11 +111,6 @@ def index():
         user = db_sess.query(Users).filter(Users.id == current_user)
     return render_template("index.html", news=news, user=user)
 
-# def index_prod_info():
-#     db_sess = db_session.create_session()
-#     asor = db_sess.query(Asortiment).all()
-#     return render_template("index.html", news=asor) #Создай новый html документ
-
 
 @app.route("/admin_panel")
 @login_required
@@ -165,22 +132,44 @@ def edit_item(id_item):
     form = AsortimentForm()
     item = db_sess.query(Asortiment).filter_by(id=id_item).first()
     if form.validate_on_submit():
-
+        print("one")
     return render_template("edit_item.html", title="Редактирование предмета", form=form, item=item)
 
-# @app.route("/add_item", methods=["GET", "POST"])
-# @login_required
-# def edit_item():
+
+@app.route('/add_item', methods=['GET', 'POST'])
+@login_required
+def add_news():
+    form = AsortimentForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        news = Asortiment()
+        news.name = form.name.data
+        news.status = form.status.data
+        news.is_private = form.arend.data
+        img_file = secure_filename(form.photo_hrev.data.filename)
+        print(img_file)
+        path = os.path.join(app.config['UPLOAD_FOLDER'], img_file)
+        print(path)
+        form.photo_hrev.data.save(path)
+        #img_file.save(path)
+        news.photo_href = path
+        current_user.append(news)
+        db_sess.merge(current_user)
+        db_sess.commit()
+        return redirect('/')
+    return render_template('news.html', title='Добавление новости', form=form)
 
 
 # @app.route("/edit_user/<int:id_item>", methods=["GET", "POST"])
 # @login_required
 # def edit_item(id_item):
+#     return render_template("edit_user.html")
 
 
 # @app.route("/confirm_request/<int:id_item>", methods=["GET", "POST"])
 # @login_required
 # def edit_item(id_item):
+#     return render_template("confirm_request.html")
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -233,26 +222,3 @@ def login():
 
 if __name__ == '__main__':
     main()
-
-    # form = AsortimentForm()
-    # if request.method == "GET":
-    #     db_sess = db_session.create_session()
-    #     news = db_sess.query(Asortiment).filter(Asortiment.id == id, Asortiment.user == current_user).first()
-    #     if news:
-    #         form.title.data = news.title
-    #         form.content.data = news.content
-    #         form.is_private.data = news.is_private
-    #     else:
-    #         abort(404)
-    # if form.validate_on_submit():
-    #     db_sess = db_session.create_session()
-    #     news = db_sess.query(Asortiment).filter(Asortiment.id == id, Asortiment.user == current_user).first()
-    #     if news:
-    #         news.title = form.title.data
-    #         news.content = form.content.data
-    #         news.is_private = form.is_private.data
-    #         db_sess.commit()
-    #         return redirect('/')
-    #     else:
-    #         abort(404)
-    # return render_template('news.html', title='Редактирование новости', form=form)

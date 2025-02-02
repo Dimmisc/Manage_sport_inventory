@@ -1,3 +1,6 @@
+h1 {
+    text-align: center;
+}
 .UAIP {
     width: 40%;
     float: left;
@@ -14,4 +17,7 @@
 }
 .borderG {
     border: 5px solid green;
+}
+.borderSome {
+    border: 5px solid blueviolet;
 }
