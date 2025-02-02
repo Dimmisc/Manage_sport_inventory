@@ -128,6 +128,23 @@ def edit_news(id_item):
                            )
 
 
+@app.route("/")
+def index():
+    db_sess = db_session.create_session()
+    if current_user.is_authenticated:
+        user = db_sess.query(Users).filter_by(id=current_user.id).first()
+        news = db_sess.query(Asortiment).filter((Asortiment.users == current_user) | (Asortiment.is_private != True))
+    else:
+        news = db_sess.query(Asortiment).filter(Asortiment.is_private != True)
+        user = db_sess.query(Users).filter(Users.id == current_user)
+    return render_template("index.html", news=news, user=user)
+
+# def index_prod_info():
+#     db_sess = db_session.create_session()
+#     asor = db_sess.query(Asortiment).all()
+#     return render_template("index.html", news=asor) #Создай новый html документ
+
+
 @app.route("/admin_panel")
 @login_required
 def admin_panel():
@@ -141,22 +158,29 @@ def admin_panel():
         return redirect("/")
 
 
-@app.route("/")
-def index():
+@app.route("/edit_item/<int:id_item>", methods=["GET", "POST"])
+@login_required
+def edit_item(id_item):
     db_sess = db_session.create_session()
-    if current_user.is_authenticated:
-        user = db_sess.query(Users).filter_by(id=current_user.id).first()
-        news = db_sess.query(Asortiment).filter((Asortiment.users == current_user) | (Asortiment.is_private != True))
-        print(current_user.user_access == "admin")
-    else:
-        news = db_sess.query(Asortiment).filter(Asortiment.is_private != True)
-        user = db_sess.query(Users).filter(Users.id == current_user)
-    return render_template("index.html", news=news, user=user)
+    form = AsortimentForm()
+    item = db_sess.query(Asortiment).filter_by(id=id_item).first()
+    if form.validate_on_submit():
 
-# def index_prod_info():
-#     db_sess = db_session.create_session()
-#     asor = db_sess.query(Asortiment).all()
-#     return render_template("index.html", news=asor) #Создай новый html документ
+    return render_template("edit_item.html", title="Редактирование предмета", form=form, item=item)
+
+# @app.route("/add_item", methods=["GET", "POST"])
+# @login_required
+# def edit_item():
+
+
+# @app.route("/edit_user/<int:id_item>", methods=["GET", "POST"])
+# @login_required
+# def edit_item(id_item):
+
+
+# @app.route("/confirm_request/<int:id_item>", methods=["GET", "POST"])
+# @login_required
+# def edit_item(id_item):
 
 
 @app.route('/register', methods=['GET', 'POST'])

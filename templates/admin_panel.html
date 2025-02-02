@@ -4,11 +4,12 @@
     <div>
         <div class="UAIP">
             <h1 style="text-align: center;">Предметы</h1>
+            <a href="/add_item" class="btn-success"><h2>Добавить</h2></a>
             {% for item in items %}
             <div class=borderG>
                 <h2>{{ item.name }}</h2>
                 <p>{{ item.status }}</p>
-                <a href="\edit_item\{{ item.id }}">Редактировать</a>
+                <a href="/edit_item/{{ item.id }}">Редактировать</a>
             </div>
             {% endfor %}
         </div>
@@ -19,7 +20,7 @@
                 <h2>{{ user.name }}</h2>
                 <h3>{{ user.user_access }}</h3>
                 <p>{{ user.about }}</p>
-                <a href="\edit_user\{{ user.id }}">Редактировать</a>
+                <a href="/edit_user/{{ user.id }}">Редактировать</a>
             </div>
             {% endfor %}
         </div>
@@ -30,7 +31,7 @@
                 <h2>{{ request.id }}</h2>
                 <h2>{{ request.user_id }}</h2>
                 <p>Start: {{request.date_start}} End: {{request.date_end}}</p>
-                <a href="\confirm_request\{{ request.id }}">Одобрить</a>
+                <a href="/confirm_request/{{ request.id }}">Одобрить</a>
             </div>
             {% endfor %}
         </div> 
