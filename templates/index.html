@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% if user.user_acces == "admin" %}
+    {% if user.user_access == 'admin' %}
         <a href="/admin_panel" class="btn btn-primary">Администрирование</a>
+    {% else %}
+        <h1>skfiejf</h1>
     {% endif %}
     <h1>Предметы</h1>
     {% for item in news %}

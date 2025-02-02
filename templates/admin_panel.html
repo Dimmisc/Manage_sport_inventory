@@ -1,5 +1,38 @@
 {% extends "base.html" %}
 
 {% block content %}
-    
+    <div>
+        <div class="UAIP">
+            <h1 style="text-align: center;">Предметы</h1>
+            {% for item in items %}
+            <div class=borderG>
+                <h2>{{ item.name }}</h2>
+                <p>{{ item.status }}</p>
+                <a href="\edit_item\{{ item.id }}">Редактировать</a>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="UAIP">
+            <h1 style="text-align: center;">Пользователи</h1>
+            {% for user in users %}
+            <div class="borderV">
+                <h2>{{ user.name }}</h2>
+                <h3>{{ user.user_access }}</h3>
+                <p>{{ user.about }}</p>
+                <a href="\edit_user\{{ user.id }}">Редактировать</a>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="RP">
+            <h1 style="text-align: center;">Запросы</h1>
+            {% for request in requests %}
+            <div class="borderR">
+                <h2>{{ request.id }}</h2>
+                <h2>{{ request.user_id }}</h2>
+                <p>Start: {{request.date_start}} End: {{request.date_end}}</p>
+                <a href="\confirm_request\{{ request.id }}">Одобрить</a>
+            </div>
+            {% endfor %}
+        </div> 
+    </div>
 {% endblock %}

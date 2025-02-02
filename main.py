@@ -34,6 +34,10 @@ def Check_free(date_start, date_end):
                 return False
             else:
                 return True
+# def make_admin(email):
+#     db_sess = db_session.create_session()
+#     user = db_sess.query(Users).filter_by(email=email)
+#     db_sess.
 
 
 def main():
@@ -128,8 +132,7 @@ def edit_news(id_item):
 @login_required
 def admin_panel():
     db_sess = db_session.create_session()
-    user = db_sess.query(Users).filter_by(id=current_user)
-    if user.user_acces == "admin":
+    if current_user.user_access == "admin":
         items = db_sess.query(Asortiment).all()
         requests = db_sess.query(Request).all()
         users = db_sess.query(Users).all()
@@ -137,15 +140,17 @@ def admin_panel():
     else:
         return redirect("/")
 
-    
+
 @app.route("/")
 def index():
     db_sess = db_session.create_session()
-    user = db_sess.query(Users).filter_by(id=current_user)
     if current_user.is_authenticated:
+        user = db_sess.query(Users).filter_by(id=current_user.id).first()
         news = db_sess.query(Asortiment).filter((Asortiment.users == current_user) | (Asortiment.is_private != True))
+        print(current_user.user_access == "admin")
     else:
         news = db_sess.query(Asortiment).filter(Asortiment.is_private != True)
+        user = db_sess.query(Users).filter(Users.id == current_user)
     return render_template("index.html", news=news, user=user)
 
 # def index_prod_info():

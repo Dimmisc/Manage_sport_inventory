@@ -1,0 +1,17 @@
+.UAIP {
+    width: 40%;
+    float: left;
+}
+.RP {
+    width: 20%;
+    float: right;
+}
+.borderR {
+    border: 5px solid darkred;
+}
+.borderV {
+    border: 5px solid violet;
+}
+.borderG {
+    border: 5px solid green;
+}
