@@ -13,7 +13,11 @@
 <body>
 <header>
     <nav class="navbar navbar-light bg-light">
+<<<<<<< HEAD
         <a class="btn navbar-brand" href="/" >   Наше приложение</a>
+=======
+        <a class="navbar-brand" href="/">Наше приложение</a>
+>>>>>>> 0044d0494c96beb375b31648bf0ddd910e3eb6b0
         {% if current_user.is_authenticated %}
             <a class="navbar-brand" href="/logout">{{ current_user.name }}</a>
         {% else %}
