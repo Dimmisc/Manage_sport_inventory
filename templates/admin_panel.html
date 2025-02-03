@@ -25,6 +25,17 @@
             {% endfor %}
         </div>
         <div class="RP">
+            <h1 style="text-align: center;">Типы объектов</h1>
+            <a href="/add_type" class="btn-success"><h2>Добавить</h2></a>
+            {% for type in types %}
+            <div class="borderY">
+                <h2>{{ type.name }}</h2>
+                <p>{{ type.description }}</p>
+                <a href="/confirm_type/{{ type.id }}">Редактировать</a>
+            </div>
+            {% endfor %}
+        </div> 
+        <div class="RP">
             <h1 style="text-align: center;">Запросы</h1>
             {% for request in requests %}
             <div class="borderR">

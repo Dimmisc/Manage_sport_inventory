@@ -2,7 +2,7 @@ h1 {
     text-align: center;
 }
 .UAIP {
-    width: 40%;
+    width: 30%;
     float: left;
 }
 .RP {
@@ -17,6 +17,9 @@ h1 {
 }
 .borderG {
     border: 5px solid green;
+}
+.borderY {
+    border: 5px solid yellow;
 }
 .borderSome {
     border: 5px solid blueviolet;

@@ -5,6 +5,7 @@ from werkzeug.utils import secure_filename
 from forms.news import AsortimentForm, RequestForm
 from forms.user import RegisterForm, LoginForm
 from data.news import Asortiment, Request
+from data.category import Idtype
 from data.users import Users
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine
@@ -120,7 +121,8 @@ def admin_panel():
         items = db_sess.query(Asortiment).all()
         requests = db_sess.query(Request).all()
         users = db_sess.query(Users).all()
-        return render_template("admin_panel.html", items=items, requests=requests, users=users, title="Управление сайтом")
+        types = db_sess.query(Idtype)
+        return render_template("admin_panel.html", items=items, requests=requests, types=types, users=users, title="Управление сайтом")
     else:
         return redirect("/")
 
@@ -140,25 +142,23 @@ def edit_item(id_item):
 @login_required
 def add_news():
     form = AsortimentForm()
+    print(False)
     if form.validate_on_submit():
+        print(True)
         db_sess = db_session.create_session()
         news = Asortiment()
         news.name = form.name.data
         news.status = form.status.data
-        news.is_private = form.arend.data
         img_file = secure_filename(form.photo.data.filename)
-        print(img_file)
         path = os.path.join(app.config['UPLOAD_FOLDER'], img_file)
-        print(path)
         form.photo.data.save(path)
-        #img_file.save(path)
         news.photo_href = path
-        current_user.append(news)
+        db_sess.add(news)
         db_sess.merge(current_user)
         db_sess.commit()
         return redirect('/')
-    return render_template('news.html', title='Добавление новости', form=form)
-
+    return render_template("add_item.html", form=form, title="Добавить объект")
+    
 
 # @app.route("/edit_user/<int:id_item>", methods=["GET", "POST"])
 # @login_required

@@ -7,10 +7,10 @@ from wtforms.validators import DataRequired
 class AsortimentForm(FlaskForm):
     name = StringField('Название', validators=[DataRequired()])
     status = StringField('Состояние')
+    type = StringField('Объект')
     # content = TextAreaField("Содержание")
-    arend = BooleanField("Состояние аренды")
     photo = FileField('Изображение')
-    submit = SubmitField("Применить")
+    submit = SubmitField("Добавить")
 
 class RequestForm(FlaskForm):
     id_item = IntegerField('Id товара')
