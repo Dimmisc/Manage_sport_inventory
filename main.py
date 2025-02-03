@@ -154,7 +154,6 @@ def add_news():
         form.photo.data.save(path)
         news.photo_href = path
         db_sess.add(news)
-        db_sess.merge(current_user)
         db_sess.commit()
         return redirect('/')
     return render_template("add_item.html", form=form, title="Добавить объект")
