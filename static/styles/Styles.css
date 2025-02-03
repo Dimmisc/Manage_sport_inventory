@@ -24,3 +24,10 @@ h1 {
 .borderSome {
     border: 5px solid blueviolet;
 }
+.cental {
+    text-align: center;
+}
+.itemMy {
+    width: 25%;
+    float: left;
+}

@@ -17,4 +17,5 @@ class RequestForm(FlaskForm):
     description = TextAreaField('Причина аренды')
     datetime_start = DateField('Начало аренды')
     datetime_end = DateField('Окончание аренды')
+    confirmed = BooleanField('Одобрить?')
     submit = SubmitField("Применить")

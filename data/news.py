@@ -27,9 +27,10 @@ class Request(SqlAlchemyBase):
     description = sqlalchemy.Column(sqlalchemy.String)
     date_start = sqlalchemy.Column(sqlalchemy.DateTime)
     date_end = sqlalchemy.Column(sqlalchemy.DateTime)
+    approved = sqlalchemy.Column(sqlalchemy.Boolean)
 
     id_user = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))
     name_user = sqlalchemy.Column(sqlalchemy.String)
-    users = orm.relationship('Users')
+    user = orm.relationship('Users')
     id_item = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("asortiment.id"))
     asortiment = orm.relationship("Asortiment")

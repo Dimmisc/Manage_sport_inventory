@@ -106,10 +106,10 @@ def index():
     db_sess = db_session.create_session()
     if current_user.is_authenticated:
         user = db_sess.query(Users).filter_by(id=current_user.id).first()
-        news = db_sess.query(Asortiment).filter((Asortiment.users == current_user) | (Asortiment.is_private != True))
+        news = db_sess.query(Asortiment).all()
     else:
-        news = db_sess.query(Asortiment).filter(Asortiment.is_private != True)
-        user = db_sess.query(Users).filter(Users.id == current_user)
+        news = db_sess.query(Asortiment).all()
+        user = None
     return render_template("index.html", news=news, user=user)
 
 
@@ -155,7 +155,7 @@ def add_news():
         news.photo_href = path
         db_sess.add(news)
         db_sess.commit()
-        return redirect('/')
+        return redirect('/admin_panel')
     return render_template("add_item.html", form=form, title="Добавить объект")
     
 
@@ -165,10 +165,15 @@ def add_news():
 #     return render_template("edit_user.html")
 
 
-# @app.route("/confirm_request/<int:id_item>", methods=["GET", "POST"])
-# @login_required
-# def edit_item(id_item):
-#     return render_template("confirm_request.html")
+@app.route("/confirm_request/<int:id_request>", methods=["GET", "POST"])
+@login_required
+def confirm_request(id_request):
+    form = RequestForm()
+    db_sess = db_session.create_session()
+    request = db_sess.query(Request).filter_by(id=id_request)
+    if form.validate_on_submit():
+        print(True)
+    return render_template("confirm_request.html", form=form, request=request, title="Одобрение запроса")
 
 
 @app.route('/register', methods=['GET', 'POST'])

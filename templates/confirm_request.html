@@ -1,5 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+<div class="container">
+    <h1 class="cental">Одобрение запроса</h1>
+    <div><h2>{{ request.id }}<h2></div>
+    <div><h2>Начинается: {{ request.date_start }}; Заканчивается {{ request.date_end }}</h2></div>
+    <div><h2>Запрос от : {{ request.user.name }}</h2></div>
+    <form action="" method="post" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <p>{{ form.confirmed.label }} {{ form.confirmed() }}</p>
+        <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+    </form>
+</div>
 {% endblock %}
