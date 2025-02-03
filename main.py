@@ -146,11 +146,11 @@ def add_news():
         news.name = form.name.data
         news.status = form.status.data
         news.is_private = form.arend.data
-        img_file = secure_filename(form.photo_hrev.data.filename)
+        img_file = secure_filename(form.photo.data.filename)
         print(img_file)
         path = os.path.join(app.config['UPLOAD_FOLDER'], img_file)
         print(path)
-        form.photo_hrev.data.save(path)
+        form.photo.data.save(path)
         #img_file.save(path)
         news.photo_href = path
         current_user.append(news)

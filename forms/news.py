@@ -9,7 +9,7 @@ class AsortimentForm(FlaskForm):
     status = StringField('Состояние')
     # content = TextAreaField("Содержание")
     arend = BooleanField("Состояние аренды")
-    photo_hrev = FileField('Изображение')
+    photo = FileField('Изображение')
     submit = SubmitField("Применить")
 
 class RequestForm(FlaskForm):
