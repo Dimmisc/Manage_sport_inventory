@@ -2,7 +2,7 @@ import os
 from flask import Flask, render_template, redirect, request, abort
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.utils import secure_filename
-from forms.news import AsortimentForm, RequestForm
+from forms.news import AsortimentForm, RequestForm, IdtypeForm
 from forms.user import RegisterForm, LoginForm
 from data.news import Asortiment, Request
 from data.category import Idtype
@@ -133,6 +133,8 @@ def edit_item(id_item):
     db_sess = db_session.create_session()
     form = AsortimentForm()
     item = db_sess.query(Asortiment).filter_by(id=id_item).first()
+    form.name.data = item.name
+    form.status.data = item.status
     if form.validate_on_submit():
         print("one")
     return render_template("edit_item.html", title="Редактирование предмета", form=form, item=item)
@@ -140,7 +142,7 @@ def edit_item(id_item):
 
 @app.route('/add_item', methods=['GET', 'POST'])
 @login_required
-def add_news():
+def add_item():
     form = AsortimentForm()
     print(False)
     if form.validate_on_submit():
@@ -153,16 +155,33 @@ def add_news():
         path = os.path.join(app.config['UPLOAD_FOLDER'], img_file)
         form.photo.data.save(path)
         news.photo_href = path
+        type = db_sess.query(Idtype).filter_by(name=form.type.data)
+        news.id_type = type
         db_sess.add(news)
         db_sess.commit()
         return redirect('/admin_panel')
     return render_template("add_item.html", form=form, title="Добавить объект")
-    
 
-# @app.route("/edit_user/<int:id_item>", methods=["GET", "POST"])
-# @login_required
-# def edit_item(id_item):
-#     return render_template("edit_user.html")
+
+@app.route('/add_type', methods=['GET', 'POST'])
+@login_required
+def add_type():
+    form = IdtypeForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        type = Idtype(name=form.name.data,
+                      description=form.description.data,
+                      )
+        db_sess.add(type)
+        db_sess.commit()
+        return redirect("/admin_panel")
+    return render_template("add_type.html", form=form, title="Добавление типов")
+
+
+@app.route("/edit_user/<int:id_user>", methods=["GET", "POST"])
+@login_required
+def edit_user(id_user):
+    return render_template("edit_user.html")
 
 
 @app.route("/confirm_request/<int:id_request>", methods=["GET", "POST"])

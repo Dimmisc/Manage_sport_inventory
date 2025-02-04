@@ -30,4 +30,22 @@ h1 {
 .itemMy {
     width: 25%;
     float: left;
+    padding-right: 5px;
+    padding-left: 5px;
+}
+.itemn {
+    border: 5px solid green;
+    display: flex;
+}
+.itemb {
+    float: left;
+    width: 50%;
+}
+.itemnd {
+    float: right;
+    width: 50%;
+}
+.imgsize {
+    height: 100px;
+    weight: 125px;
 }

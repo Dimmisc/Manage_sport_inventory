@@ -7,7 +7,14 @@
     <h1>Предметы</h1>
     {% for item in news %}
     <div class="itemMy">
-        <img src="/{{ item.photo_href }}">
+        <div class="itemn">
+            <div class="itemb">
+                <img class="imgsize" src="/{{ item.photo_href }}">
+            </div>
+            <div class="itemnd">
+                <p>fweihf</p>
+            </div>
+        </div>
     </div>
     {% endfor %}
 {% endblock %}
