@@ -19,3 +19,7 @@ class RequestForm(FlaskForm):
     datetime_end = DateField('Окончание аренды')
     confirmed = BooleanField('Одобрить?')
     submit = SubmitField("Применить")
+
+class IdtypeForm(FlaskForm):
+    name = StringField('Название', validators=[DataRequired()])
+    description = TextAreaField('Описание')
