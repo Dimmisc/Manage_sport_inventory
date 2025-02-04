@@ -55,13 +55,13 @@ def logout():
     return redirect("/")
 
 
-@app.route('/news_delete/<int:id>', methods=['GET', 'POST'])
+@app.route('/delete_item/<int:id_item>', methods=['GET', 'POST'])
 @login_required
-def news_delete(id):
+def delete_item(id_item):
     db_sess = db_session.create_session()
-    news = db_sess.query(Asortiment).filter(Asortiment.id == id, Asortiment.user == current_user).first()
-    if news:
-        db_sess.delete(news)
+    item = db_sess.query(Asortiment).filter(Asortiment.id == id_item, Asortiment.user == current_user).first()
+    if item:
+        db_sess.delete(item)
         db_sess.commit()
     else:
         abort(404)
@@ -106,11 +106,11 @@ def index():
     db_sess = db_session.create_session()
     if current_user.is_authenticated:
         user = db_sess.query(Users).filter_by(id=current_user.id).first()
-        news = db_sess.query(Asortiment).all()
+        item = db_sess.query(Asortiment).all()
     else:
-        news = db_sess.query(Asortiment).all()
+        item = db_sess.query(Asortiment).all()
         user = None
-    return render_template("index.html", news=news, user=user)
+    return render_template("index.html", news=item, user=user)
 
 
 @app.route("/admin_panel")
@@ -148,19 +148,19 @@ def add_item():
     if form.validate_on_submit():
         print(True)
         db_sess = db_session.create_session()
-        news = Asortiment()
-        news.name = form.name.data
-        news.status = form.status.data
+        item = Asortiment()
+        item.name = form.name.data
+        item.status = form.status.data
         img_file = secure_filename(form.photo.data.filename)
         path = os.path.join(app.config['UPLOAD_FOLDER'], img_file)
         form.photo.data.save(path)
-        news.photo_href = path
+        item.photo_href = path
         type = db_sess.query(Idtype).filter_by(name=form.type.data).first()
         user = db_sess.query(Users).filter_by(id=current_user.id).first()
-        news.users = user
+        item.users = user
         if type:
-            news.idtype = type
-        db_sess.add(news)
+            item.idtype = type
+        db_sess.add(item)
         db_sess.commit()
         return redirect('/admin_panel')
     return render_template("add_item.html", form=form, title="Добавить объект")
