@@ -14,7 +14,10 @@ class RegisterForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
+    name = StringField("Имя")
     email = EmailField('Почта', validators=[DataRequired()])
     password = PasswordField('Пароль', validators=[DataRequired()])
+    access = StringField("Доступ")
     remember_me = BooleanField('Запомнить меня')
+    status = StringField("Статус")
     submit = SubmitField('Войти')

@@ -21,7 +21,14 @@
             <div class="paing">
                 <div class="borderV paingsm">
                     <h2 class="cental">{{ user.name }}</h2>
-                    <h3 class="cental">{{ user.user_access }}</h3>
+                    <div class="descp">
+                        <div class="itemll">
+                            <h6>Доступ: {{ user.user_access }};</h6>
+                        </div>
+                        <div class="itemrr">
+                            <h6>Почта: {{ user.email }}</h6>
+                        </div>
+                    </div>
                     <p>{{ user.about }}</p>
                     <div class="cental" ><a class="btn btn-success" href="/edit_user/{{ user.id }}">Редактировать</a></div>
                 </div>

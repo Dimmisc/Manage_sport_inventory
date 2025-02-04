@@ -1,3 +1,15 @@
+.exit {
+    border:3px solid red;
+    color: white;
+    background-color: red;
+    border-radius: 10px;
+}
+.exit:hover {
+    border:3px solid rgb(255, 77, 77);
+    color: white;
+    background-color: rgb(255, 77, 77);
+    text-decoration: none;
+}
 h1 {
     text-align: center;
 }
@@ -45,17 +57,29 @@ h1 {
     display: flex;
     border-radius: 5px;
 }
-.itemb {
+.iteml {
     float: left;
     width: 50%;
 }
-.itemnd {
+.itemll {
+    float: left;
+    width: 33%;
+}
+.itemr {
     float: right;
     width: 50%;
+}
+.itemrr {
+    float: right;
+    width: 67%;
 }
 .imgsize {
     height: 100px;
     height: 100px;
+}
+.imgadsize {
+    height: 400px;
+    height: 400px;
 }
 .backcolor {
     background-color: rgb(32, 116, 11);
@@ -84,4 +108,7 @@ h1 {
 }
 .paingsm {
     padding: 3px;
+}
+.descp {
+    display: flex;
 }

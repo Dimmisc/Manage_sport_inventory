@@ -136,7 +136,7 @@ def edit_item(id_item):
     form.name.data = item.name
     form.status.data = item.status
     if form.validate_on_submit():
-        print("one")
+        print('one')
     return render_template("edit_item.html", title="Редактирование предмета", form=form, item=item)
 
 
@@ -184,7 +184,12 @@ def add_type():
 @app.route("/edit_user/<int:id_user>", methods=["GET", "POST"])
 @login_required
 def edit_user(id_user):
-    return render_template("edit_user.html")
+    form = LoginForm()
+    db_sess = db_session.create_session()
+    user = db_sess.query(Users).filter_by(id=id_user).first()
+    if form.validate_on_submit():
+        print("TWO")
+    return render_template("edit_user.html", form=form, user=user, title="Изменение пользователя")
 
 
 @app.route("/confirm_request/<int:id_request>", methods=["GET", "POST"])

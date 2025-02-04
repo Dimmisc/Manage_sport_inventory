@@ -2,30 +2,55 @@
 
 {% block content %}
 <div class="container">
-    <form action="" method="post" enctype="multipart/form-data">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.name.label }}<br>
-            {{ form.name(class="form-control") }}<br>
-            {% for error in form.name.errors %}
-                <p class="alert alert-danger" role="alert">
-                    {{ error }}
-                </p>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.description.label }}<br>
-            {{ form.description(class="form-control") }}<br>
-            {% for error in form.description.errors %}
-                <p class="alert alert-danger" role="alert">
-                    {{ error }}
-                </p>
-            {% endfor %}
-        </p>
-        <p> {{ form.photo }} </p>
-        <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
-        {{ message }}
-
-    </form>
+    <div>
+        <img class="imgadsize borderG" src="/{{ item.photo_href }}">
+    </div>
+    <div>
+        <form action="" method="post" enctype="multipart/form-data">
+            <div>
+                {{ form.hidden_tag() }}
+                <div>
+                    <div>
+                        {{ form.name.label }}
+                    </div>
+                    <div>
+                        {{ form.name(class="form-control") }}
+                    </div>
+                    <div>
+                        {% for error in form.name.errors %}
+                        <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <p>Описание</p>
+                    </div>
+                    <div>
+                        {{ item.idtype.description }}
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        {{ form.status.label }}
+                    </div>
+                    <div>
+                        {{ form.status(class="form-control") }}
+                    </div>
+                    <div>
+                        {% for error in form.status.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+                <p>{{ message }}</p>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}
