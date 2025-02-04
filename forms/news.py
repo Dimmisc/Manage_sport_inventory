@@ -23,7 +23,4 @@ class RequestForm(FlaskForm):
 class IdtypeForm(FlaskForm):
     name = StringField('Название', validators=[DataRequired()])
     description = TextAreaField('Описание')
-<<<<<<< HEAD
     submit = SubmitField("Добавить")
-=======
->>>>>>> ca9d584e28f6f2933817848f0577c6b3680f0efc

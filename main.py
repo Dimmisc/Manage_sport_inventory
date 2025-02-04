@@ -155,8 +155,11 @@ def add_item():
         path = os.path.join(app.config['UPLOAD_FOLDER'], img_file)
         form.photo.data.save(path)
         news.photo_href = path
-        type = db_sess.query(Idtype).filter_by(name=form.type.data)
-        news.id_type = type
+        type = db_sess.query(Idtype).filter_by(name=form.type.data).first()
+        user = db_sess.query(Users).filter_by(id=current_user.id).first()
+        news.users = user
+        if type:
+            news.idtype = type
         db_sess.add(news)
         db_sess.commit()
         return redirect('/admin_panel')

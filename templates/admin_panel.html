@@ -3,45 +3,53 @@
 {% block content %}
     <div>
         <div class="UAIP">
-            <h1 style="text-align: center;">Предметы</h1>
-            <div calss="cental"><a href="/add_item" class="btn btn-success"><h2>Добавить</h2></a></div>
+            <h1 calss="cental">Предметы:</h1>
+            <p class="cental"><a href="/add_item" class="btn btn-success">Добавить</a></p>
             {% for item in items %}
-            <div class=borderG>
-                <h2>{{ item.name }}</h2>
-                <p>{{ item.status }}</p>
-                <a href="/edit_item/{{ item.id }}">Редактировать</a>
+            <div class="paing">
+                <div class="borderG paingsm">
+                    <h2 class="cental">{{ item.name }}</h2>
+                    <p>{{ item.status }}</p>
+                    <div class="cental" ><a class="btn btn-success" href="/edit_item/{{ item.id }}">Редактировать</a></div>
+                </div>
             </div>
             {% endfor %}
         </div>
         <div class="UAIP">
-            <h1 style="text-align: center;">Пользователи</h1>
+            <h1 class="cental">Пользователи:</h1>
             {% for user in users %}
-            <div class="borderV">
-                <h2>{{ user.name }}</h2>
-                <h3>{{ user.user_access }}</h3>
-                <p>{{ user.about }}</p>
-                <a href="/edit_user/{{ user.id }}">Редактировать</a>
+            <div class="paing">
+                <div class="borderV paingsm">
+                    <h2 class="cental">{{ user.name }}</h2>
+                    <h3 class="cental">{{ user.user_access }}</h3>
+                    <p>{{ user.about }}</p>
+                    <div class="cental" ><a class="btn btn-success" href="/edit_user/{{ user.id }}">Редактировать</a></div>
+                </div>
             </div>
             {% endfor %}
         </div>
         <div class="RP">
-            <h1 style="text-align: center;">Типы объектов</h1>
+            <h1 class="cental">Типы объектов:</h1>
             <div class="cental"><a href="/add_type" class="btn btn-success"><h2>Добавить</h2></a></div>
             {% for type in types %}
-            <div class="borderY">
-                <h2>{{ type.name }}</h2>
-                <p>{{ type.description }}</p>
+            <div class="paing">
+                <div class="borderY paingsm">
+                    <h2 class="cental">{{ type.name }}</h2>
+                    <h2 class="cental">{{ type.description }}</h2>
+                </div>
             </div>
             {% endfor %}
         </div> 
         <div class="RP">
-            <h1 style="text-align: center;">Запросы</h1>
+            <h1 class="cental">Запросы:</h1>
             {% for request in requests %}
-            <div class="borderR">
-                <h2>{{ request.id }}</h2>
-                <h2>{{ request.user_id }}</h2>
-                <p>Start: {{request.date_start}} End: {{request.date_end}}</p>
-                <a href="/confirm_request/{{ request.id }}">Одобрить</a>
+            <div class="paing">
+                <div class="borderR paingsm">
+                    <h2 class="cental">{{ request.id }}</h2>
+                    <h2 class="cental">{{ request.user_id }}</h2>
+                    <p>Start: {{request.date_start}} End: {{request.date_end}}</p>
+                    <div class="cental"><a class="btn btn-success" href="/confirm_request/{{ request.id }}">Одобрить</a></div>
+                </div>
             </div>
             {% endfor %}
         </div> 

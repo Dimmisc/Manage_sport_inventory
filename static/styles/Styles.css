@@ -11,15 +11,19 @@ h1 {
 }
 .borderR {
     border: 5px solid darkred;
+    border-radius: 10px;
 }
 .borderV {
     border: 5px solid violet;
+    border-radius: 10px;
 }
-.borderG {
-    border: 5px solid green;
+.borderG {  
+    border: 5px solid rgb(32, 116, 11);
+    border-radius: 10px;
 }
 .borderY {
     border: 5px solid yellow;
+    border-radius: 10px;
 }
 .borderSome {
     border: 5px solid blueviolet;
@@ -27,15 +31,19 @@ h1 {
 .cental {
     text-align: center;
 }
+.centall {
+    box-align: center;
+}
 .itemMy {
     width: 25%;
     float: left;
-    padding-right: 5px;
-    padding-left: 5px;
+    padding: 5px;
 }
 .itemn {
-    border: 5px solid green;
+    padding: 5px;
+    border: 3px solid green;
     display: flex;
+    border-radius: 5px;
 }
 .itemb {
     float: left;
@@ -47,5 +55,33 @@ h1 {
 }
 .imgsize {
     height: 100px;
-    weight: 125px;
+    height: 100px;
+}
+.backcolor {
+    background-color: rgb(32, 116, 11);
+    color: white;
+}
+.backcolorV {
+    background-color: blueviolet;
+    color: white;
+}
+.backcolorV:hover {
+    background-color: rgb(160, 89, 226);
+    color: white;
+    text-decoration: none;
+}
+.backcolor:hover {
+    background-color: rgb(80, 201, 80);
+    color: white;
+    text-decoration: none;
+}
+.BI {
+    border: 2px solid rgb(32, 116, 11);
+    border-radius: 10px;
+}
+.paing {
+    padding: 5px;
+}
+.paingsm {
+    padding: 3px;
 }
