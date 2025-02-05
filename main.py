@@ -192,6 +192,7 @@ def edit_user(id_user):
     db_sess = db_session.create_session()
     user = db_sess.query(Users).filter_by(id=id_user).first()
     if form.validate_on_submit():
+
         print("TWO")
     return render_template("edit_user.html", form=form, user=user, title="Изменение пользователя")
 
@@ -202,8 +203,12 @@ def confirm_request(id_request):
     form = RequestForm()
     db_sess = db_session.create_session()
     request = db_sess.query(Request).filter_by(id=id_request).first()
+    form.description.data = request.description
     if form.validate_on_submit():
-        print(True)
+        print(form.confirmed.data)
+        db_sess.query(Request).filter_by(id=id_request).update({'description': form.description.data, 'approved': form.confirmed.data}, synchronize_session='fetch')
+        db_sess.commit()
+        return redirect("/admin_panel")
     return render_template("confirm_request.html", form=form, request=request, title="Одобрение запроса")
 
 

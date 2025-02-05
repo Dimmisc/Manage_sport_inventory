@@ -123,3 +123,15 @@ h1 {
 .padr {
     padding-right: 100px;
 }
+.marg {
+    margin-bottom: 10px;
+}
+.polosaty {
+    background: repeating-linear-gradient(
+  45deg,
+  #6bbc60,
+  #6bbc60 10px,
+  #9bbc46 10px,
+  #9bbc46 20px
+);
+}

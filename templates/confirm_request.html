@@ -3,20 +3,24 @@
 {% block content %}
 <div class="container">
     <div>
-        <div>
-            <h1>{{ user.name }}</h1>
+        <h1>Одобрение запроса</h1>
+        <div class="cental">
+            <h1>ID запроса:     {{ request.id }}</h1>
+        </div>
+        <div class="cental">
+            <h2>Пользователь:   {{ request.user.name }}</h2>
         </div>
         <form action="" method="post" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
         <div>
             <div>
-                {{ form.status.label }}
+                {{ form.description.label }}
             </div>
             <div>
-                {{ form.status(class="form-control") }}
+                {{ form.description(class="form-control") }}
             </div>
             <div>
-                {% for error in form.name.errors %}
+                {% for error in form.description.errors %}
                 <div class="alert alert-danger" role="alert">
                     {{ error }}
                 </div>
@@ -24,23 +28,25 @@
             </div>
         </div>
         <div>
-            <div>
-                {{ form.access.label }}
+            <div class="cental marg">
+                <div>
+                    {{ form.confirmed.label }}
+                </div>
+                <div>
+                    {{ form.confirmed(class="form-control") }}
+                </div>
             </div>
             <div>
-                {{ form.access(class="form-control") }}
-            </div>
-            <div>
-                {% for error in form.access.errors %}
+                {% for error in form.confirmed.errors %}
                 <div class="alert alert-danger" role="alert">
                     {{ error }}
                 </div>
                 {% endfor %}
             </div>
         </div>
-        <p>
-            {{ form.submit(type="submit", class="btn btn-primary") }}
-        </p>
+        <div class="cental">
+            {{ form.submit(type="submit", class="btn btn-primary", value="Изменить") }}
+        </div>
         <p>
             {{ message }}
         </p>

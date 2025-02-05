@@ -9,7 +9,7 @@
             <div class="paing">
                 <div class="borderG paingsm">
                     <h2 class="cental">{{ item.name }}</h2>
-                    <p>{{ item.status }}</p>
+                    <p class="cental">Состояние: {{ item.status }}</p>
                     <div class="cental" >
                         <div class="descp">
                             <div class="iteml">
@@ -60,11 +60,24 @@
             <h1 class="cental">Запросы:</h1>
             {% for request in requests %}
             <div class="paing">
+                {% if request.approved == True %}
+                <div class="borderR paingsm polosaty">
+                {% else %}
                 <div class="borderR paingsm">
+                {% endif %}
                     <h2 class="cental">{{ request.id }}</h2>
-                    <h2 class="cental">{{ request.user_id }}</h2>
-                    <p>Start: {{request.date_start}} End: {{request.date_end}}</p>
-                    <div class="cental"><a class="btn btn-success" href="/confirm_request/{{ request.id }}">Одобрить</a></div>
+                    <h3 class="cental">Пользователь: {{ request.user.name }}</h3>
+                    <p class="cental">Start: {{request.date_start}} End: {{request.date_end}}</p>
+                    {% if request.approved == True %}
+                    <div class="cental">
+                        <a class="btn btn-success" href="/confirm_request/{{ request.id }}">Одобрено</a>
+                    </div>
+                    {% else %}
+                    <div class="cental">
+                        <a class="btn btn-success" href="/confirm_request/{{ request.id }}">Одобрить</a>
+                    </div>
+                    {% endif %}
+                    
                 </div>
             </div>
             {% endfor %}
