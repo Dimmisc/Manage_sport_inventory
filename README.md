@@ -1,2 +1,2 @@
-Пожалуйста посмотрите файл NEED
+Пожалуйста посмотрите файл NEED\n
 Sport inventory manage
