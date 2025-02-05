@@ -13,9 +13,18 @@
 <body>
 <header>
     <nav class="navbar navbar-light bg-light">
-        <a class="btn navbar-brand borderSome backcolorV" href="/" >Наше приложение</a>
+        <a class="btn navbar-brand borderSome backcolorV" href="/" >Главная</a>
         {% if current_user.user_access == 'admin' %}
-        <div class="cental"><a href="/admin_panel" class="btn btn-primary">Администрирование</a></div>
+        <div class="cental">
+            <a href="/arrended" class="btn btn-primary">Арендование предметы</a>
+        </div>
+        <div class="cental">
+            <a href="/admin_panel" class="btn btn-primary">Администрирование</a>
+        </div>
+        {% else %}
+        <div class="cental">
+            <a href="/arrended" class="btn btn-primary">Арендование предметы</a>
+        </div>
         {% endif %}
         {% if current_user.is_authenticated %}
         <div>

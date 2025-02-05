@@ -25,7 +25,7 @@ login_manager.login_view = 'login'
 def Check_free(date_start, date_end):
     date_start = str(date_start)
     date_end = str(date_end)
-    dates = db_session.create_session().query(Request).all()
+    dates = db_session.create_session.query(Request).all()
     if dates:
         for p in dates:
             if date_start > p.date_start and date_start < p.date_end and date_end < p.date_end and date_end > p.date_start:
@@ -113,6 +113,14 @@ def index():
         item = db_sess.query(Asortiment).all()
         user = None
     return render_template("index.html", news=item, user=user)
+
+
+@app.route("/arrended")
+@login_required
+def arrended():
+    db_sess = db_session.create_session()
+    items = db_sess.query(Request).filter_by(id_user=current_user.id).all()
+    return render_template("arrended.html", items=items, title="Ваши арендованые предметы")
 
 
 @app.route("/admin_panel")

@@ -1,9 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% if user.user_access == 'admin' %}
-        <div class="cental"><a href="/admin_panel" class="btn btn-primary">Администрирование</a></div>
-    {% endif %}
     <h1>Предметы</h1>
     {% for item in news %}
     <div class="itemMy">
