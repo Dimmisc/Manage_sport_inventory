@@ -25,18 +25,16 @@ login_manager.login_view = 'login'
 def Check_free(date_start, date_end):
     date_start = str(date_start)
     date_end = str(date_end)
-    db_sess = db_session.create_session()
-    dates = db_sess.query(Request).all()
-    Wrong_argument = True
-    if db_sess:
+    dates = db_session.create_session().query(Request).all()
+    if dates:
         for p in dates:
             if date_start > p.date_start and date_start < p.date_end and date_end < p.date_end and date_end > p.date_start:
-                Wrong_argument = False
+                return False
             if date_start < p.date_start and date_start < p.date_end and date_end < p.date_end and date_end > p.date_start:
-                Wrong_argument = False
+                return False
             if date_start > p.date_start and date_start < p.date_end and date_end > p.date_end and date_end > p.date_start:
-                Wrong_argument = False
-    return Wrong_argument
+                return False
+    return True
 
 
 def main():
