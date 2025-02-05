@@ -4,13 +4,22 @@
     <div>
         <div class="UAIP">
             <h1 calss="cental">Предметы:</h1>
-            <p class="cental"><a href="/add_item" class="btn btn-success">Добавить</a></p>
+            <div class="cental"><a href="/add_item" class="btn btn-success"><h2>Добавить</h2></a></div>
             {% for item in items %}
             <div class="paing">
                 <div class="borderG paingsm">
                     <h2 class="cental">{{ item.name }}</h2>
                     <p>{{ item.status }}</p>
-                    <div class="cental" ><a class="btn btn-success" href="/edit_item/{{ item.id }}">Редактировать</a></div>
+                    <div class="cental" >
+                        <div class="descp">
+                            <div class="iteml">
+                                <a class="btn exit" href="/delete_item/{{ item.id }}">Удалить</a>
+                            </div>
+                            <div class="itemr">
+                                <a class="btn btn-success" href="/edit_item/{{ item.id }}">Редактировать</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             {% endfor %}

@@ -17,7 +17,7 @@ class Asortiment(SqlAlchemyBase):
 
     user_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))
     users = orm.relationship('Users')
-    idtype = orm.relationship("Idtype", secondary="association", backref="asortiment")
+    idtype = orm.relationship("Idtype")
     request = orm.relationship("Request", back_populates='asortiment')
 
 
@@ -25,8 +25,8 @@ class Request(SqlAlchemyBase):
     __tablename__ = 'request'
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     description = sqlalchemy.Column(sqlalchemy.String)
-    date_start = sqlalchemy.Column(sqlalchemy.DateTime)
-    date_end = sqlalchemy.Column(sqlalchemy.DateTime)
+    date_start = sqlalchemy.Column(sqlalchemy.String)
+    date_end = sqlalchemy.Column(sqlalchemy.String)
     approved = sqlalchemy.Column(sqlalchemy.Boolean)
 
     id_user = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))

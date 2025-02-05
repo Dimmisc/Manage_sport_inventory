@@ -3,38 +3,37 @@
 {% block content %}
 <div class="container">
     <div class="container form-container">
-        <h1 class="text-center">Заполнение формы инвентаря</h1>
+        <h1 class="text-center">Аренда предмета</h1>
 
-        <!-- Display the uploaded image -->
-<!--        <div class="text-center mb-4">-->
-<!--            <img src="{{ url_for('static', filename='1738059215226gp0b5nbs.png') }}" alt="Инвентарь Фото" style="max-width: 100%;">-->
-<!--        </div>-->
+       <div class="text-center mb-4">
+           <img src="/{{ item.photo_href }}">
         <div>
             {{ item.name }}
         </div>
-        <p> Описание товара </p>
         <div>
-            {{ form.description }}
+            <p>Описание товара: {{  item.idtype.description }} </p>
         </div>
         <form method="POST">
-
-            <div class="mb-3">
-                {{ form.datetime_start.label(class="form-label") }}
-                {{ form.datetime_start(class="form-control") }}
+            {{ form.hidden_tag() }}
+            <div class="descp">
+                <div class="mb-3 datal padr">
+                    {{ form.datetime_start.label(class="form-label") }}
+                    {{ form.datetime_start(class="form-control") }}
+                </div>
+                <div class="mb-3 datar padr">
+                    {{ form.datetime_end.label(class="form-label") }}
+                    {{ form.datetime_end(class="form-control") }}
+                </div>
             </div>
-
-            <div class="mb-3">
-                {{ form.datetime_end.label(class="form-label") }}
-                {{ form.datetime_end(class="form-control") }}
-            </div>
-
             <div class="mb-3">
                 {{ form.description.label(class="form-label") }}
                 {{ form.description(class="form-control") }}
             </div>
-
             <div class="text-center">
-                {{ form.submit(type="submit", class="btn btn-custom") }}
+                {{ form.submit(type="submit", class="btn btn-success") }}
+            </div>
+            <div>
+            {{ message }}
             </div>
         </form>
     </div>

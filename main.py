@@ -23,18 +23,20 @@ login_manager.login_view = 'login'
 
 
 def Check_free(date_start, date_end):
-    with Session(autoflush=False, bind=engine) as db:
-        # получение всех объектов
-        dates = db.query(Request).all()
+    date_start = str(date_start)
+    date_end = str(date_end)
+    db_sess = db_session.create_session()
+    dates = db_sess.query(Request).all()
+    Wrong_argument = True
+    if db_sess:
         for p in dates:
             if date_start > p.date_start and date_start < p.date_end and date_end < p.date_end and date_end > p.date_start:
-                return False
+                Wrong_argument = False
             if date_start < p.date_start and date_start < p.date_end and date_end < p.date_end and date_end > p.date_start:
-                return False
+                Wrong_argument = False
             if date_start > p.date_start and date_start < p.date_end and date_end > p.date_end and date_end > p.date_start:
-                return False
-            else:
-                return True
+                Wrong_argument = False
+    return Wrong_argument
 
 
 def main():
@@ -59,35 +61,37 @@ def logout():
 @login_required
 def delete_item(id_item):
     db_sess = db_session.create_session()
-    item = db_sess.query(Asortiment).filter(Asortiment.id == id_item, Asortiment.user == current_user).first()
+    item = db_sess.query(Asortiment).filter(Asortiment.id == id_item).first()
     if item:
         db_sess.delete(item)
         db_sess.commit()
     else:
         abort(404)
-    return redirect('/')
+    return redirect('/admin_panel')
 
 
 @app.route('/request/<int:id_item>', methods=['GET', 'POST'])
 @login_required
 def edit_news(id_item):
     db_sess = db_session.create_session()
-    item = db_sess.get(Asortiment, id_item)
+    item = db_sess.query(Asortiment).filter_by(id=id_item).first()
     form = RequestForm()
-    form.description = item.idtype.description
     print(form, item)
     if form.validate_on_submit():
-        if Check_free(form.datetime_start.data, form.datetime_end.data):
+        if Check_free(form.datetime_start.data, form.datetime_end.data) == True:
+            print("notsome")
             request = Request(id_item=id_item,
-                              id_user=current_user,
-                              date_start=form.datetime_start.data,
-                              date_end=form.datetime_end.data,
+                              id_user=current_user.id,
+                              user=db_sess.query(Users).filter_by(id=current_user.id).one(),
+                              date_start=str(form.datetime_start.data),
+                              date_end=str(form.datetime_end.data),
                               description="None"
                               )
             db_sess.add(request)
             db_sess.commit()
-            return redirect()
+            return redirect("/")
         else:
+            print("some")
             return render_template("request.html",
                                    form=form,
                                    item=item,
@@ -197,7 +201,7 @@ def edit_user(id_user):
 def confirm_request(id_request):
     form = RequestForm()
     db_sess = db_session.create_session()
-    request = db_sess.query(Request).filter_by(id=id_request)
+    request = db_sess.query(Request).filter_by(id=id_request).first()
     if form.validate_on_submit():
         print(True)
     return render_template("confirm_request.html", form=form, request=request, title="Одобрение запроса")

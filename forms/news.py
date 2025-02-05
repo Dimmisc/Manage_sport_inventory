@@ -13,12 +13,11 @@ class AsortimentForm(FlaskForm):
     submit = SubmitField("Добавить")
 
 class RequestForm(FlaskForm):
-    id_item = IntegerField('Id товара')
     description = TextAreaField('Причина аренды')
     datetime_start = DateField('Начало аренды')
     datetime_end = DateField('Окончание аренды')
     confirmed = BooleanField('Одобрить?')
-    submit = SubmitField("Применить")
+    submit = SubmitField("Арендовать")
 
 class IdtypeForm(FlaskForm):
     name = StringField('Название', validators=[DataRequired()])

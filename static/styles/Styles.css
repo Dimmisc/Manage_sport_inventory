@@ -2,7 +2,7 @@
     border:3px solid red;
     color: white;
     background-color: red;
-    border-radius: 10px;
+    border-radius: 5px;
 }
 .exit:hover {
     border:3px solid rgb(255, 77, 77);
@@ -111,4 +111,15 @@ h1 {
 }
 .descp {
     display: flex;
+}
+.datal {
+    float: left;
+    width: 23%;
+}
+.datar {
+    float: right;
+    width: 23%;
+}
+.padr {
+    padding-right: 100px;
 }
