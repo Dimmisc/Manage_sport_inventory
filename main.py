@@ -25,7 +25,8 @@ login_manager.login_view = 'login'
 def Check_free(date_start, date_end):
     date_start = str(date_start)
     date_end = str(date_end)
-    dates = db_session.create_session.query(Request).all()
+    db_sess = db_session.create_session()
+    dates = db_sess.query(Request).all()
     if dates:
         for p in dates:
             if date_start > p.date_start and date_start < p.date_end and date_end < p.date_end and date_end > p.date_start:
@@ -112,7 +113,7 @@ def index():
     else:
         item = db_sess.query(Asortiment).all()
         user = None
-    return render_template("index.html", news=item, user=user)
+    return render_template("index.html", news=item, user=user, title="Главная")
 
 
 @app.route("/arrended")
@@ -120,7 +121,8 @@ def index():
 def arrended():
     db_sess = db_session.create_session()
     items = db_sess.query(Request).filter_by(id_user=current_user.id).all()
-    return render_template("arrended.html", items=items, title="Ваши арендованые предметы")
+    trtp = len(items) != 0
+    return render_template("arrended.html", items=items, trtp=trtp, title="Ваши арендованые предметы")
 
 
 @app.route("/admin_panel")
@@ -131,7 +133,7 @@ def admin_panel():
         items = db_sess.query(Asortiment).all()
         requests = db_sess.query(Request).all()
         users = db_sess.query(Users).all()
-        types = db_sess.query(Idtype)
+        types = db_sess.query(Idtype).all()
         return render_template("admin_panel.html", items=items, requests=requests, types=types, users=users, title="Управление сайтом")
     else:
         return redirect("/")
@@ -146,8 +148,14 @@ def edit_item(id_item):
     form.name.data = item.name
     form.status.data = item.status
     if form.validate_on_submit():
-        print('one')
-    return render_template("edit_item.html", title="Редактирование предмета", form=form, item=item)
+        db_sess.query(Asortiment).filter_by(id=id_item).update({'name': form.name.data, 'status':form.status.data}, synchronize_session='fetch')
+        db_sess.commit()
+        return redirect("/admin_panel")
+    return render_template("edit_item.html",
+                           title="Редактирование предмета",
+                           form=form,
+                           item=item,
+                           )
 
 
 @app.route('/add_item', methods=['GET', 'POST'])
@@ -197,9 +205,15 @@ def edit_user(id_user):
     form = LoginForm()
     db_sess = db_session.create_session()
     user = db_sess.query(Users).filter_by(id=id_user).first()
+    form.access.data = user.user_access
+    form.status.data = user.about
     if form.validate_on_submit():
-
-        print("TWO")
+        db_sess.query(Users).filter_by(id=id_user).update({'user_access': form.access.data,
+                                                          'about': form.status.data}, 
+                                                          synchronize_session='fetch'
+                                                          )
+        
+        return redirect("/admin_panel")
     return render_template("edit_user.html", form=form, user=user, title="Изменение пользователя")
 
 
@@ -211,8 +225,10 @@ def confirm_request(id_request):
     request = db_sess.query(Request).filter_by(id=id_request).first()
     form.description.data = request.description
     if form.validate_on_submit():
-        print(form.confirmed.data)
-        db_sess.query(Request).filter_by(id=id_request).update({'description': form.description.data, 'approved': form.confirmed.data}, synchronize_session='fetch')
+        db_sess.query(Request).filter_by(id=id_request).update({'description': form.description.data,
+                                                               'approved': form.confirmed.data},
+                                                               synchronize_session='fetch'
+                                                               )
         db_sess.commit()
         return redirect("/admin_panel")
     return render_template("confirm_request.html", form=form, request=request, title="Одобрение запроса")

@@ -1,6 +1,24 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container">
-</div>
+    <h1>Предметы</h1>
+    {% if trtp != 0 %}
+    {% for request in items %}
+    <div class="itemMy">
+        <div class="itemn">
+            <div class="itemll">
+                <img class="imgsize" src="/{{ request.asortiment.photo_href }}">
+            </div>
+            <div class="itemrr">
+                <div>
+                    <h2 class="paing">{{ request.asortiment.name }}</h2>
+                    <h2><a class="borderG backcolor" href="/Unconfirm_request/{{ request.asortiment.id }}">Отмена аренды</a></h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <h1>Предметов нет!</h1>
+    {% endif %}
 {% endblock %}
