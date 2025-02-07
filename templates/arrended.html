@@ -5,7 +5,13 @@
     {% if trtp != 0 %}
     {% for request in items %}
     <div class="itemMy">
+        {% if request.type == 'Не одобрен' %}
+        <div class="itemn polosatyR">
+        {% elif request.type == 'Одобрен' or request.type == "Идёт" %}
+        <div class="itemn stolbikG">
+        {% elif request.type == 'Завершён' %}
         <div class="itemn polosaty">
+        {% endif %}
             <div class="itemll">
                 <img class="imgsize" src="/{{ request.asortiment.photo_href }}">
             </div>
@@ -13,7 +19,9 @@
                 <div>
                     <h2 class="paing">{{ request.asortiment.name }}</h2>
                     <h5 class="paing">{{ request.type }}</h5>
-                    <h2><a class="borderG backcolor" href="/Unconfirm_request/{{ request.asortiment.id }}">Отмена аренды</a></h2>
+                    {% if request.type == 'Не одобрен' or  request.type == 'Одобрен' %}
+                    <a class="borderG backcolor" href="/Unconfirm_request/{{ request.id }}">Отмена аренды</a>
+                    {% endif %}
                 </div>
             </div>
         </div>

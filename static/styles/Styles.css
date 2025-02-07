@@ -63,7 +63,7 @@ h1 {
 }
 .itemll {
     float: left;
-    width: 33%;
+    width: 35%;
 }
 .itemr {
     float: right;
@@ -71,11 +71,11 @@ h1 {
 }
 .itemrr {
     float: right;
-    width: 67%;
+    width: 65%;
 }
 .imgsize {
-    height: 150px;
-    height: 150px;
+    height: 125px;
+    height: 100px;
 }
 .imgadsize {
     height: 400px;

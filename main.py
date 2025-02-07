@@ -22,11 +22,11 @@ app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 login_manager.login_view = 'login'
 
 
-def Check_free(date_start, date_end):
+def Check_free(date_start, date_end, id):
     date_start = str(date_start)
     date_end = str(date_end)
     db_sess = db_session.create_session()
-    dates = db_sess.query(Request).all()
+    dates = db_sess.query(Request).filter(Request.id_item == id).all()
     if dates:
         for p in dates:
             if date_start >= p.date_start and date_start <= p.date_end and date_end <= p.date_end and date_end >= p.date_start:
@@ -44,6 +44,8 @@ def check_out(db_sess):
     for request in requests:
         if request.approved == False and date >= request.date_start:
             db_sess.delete(request)
+        elif request.approved == True and date >= request.date_start:
+            db_sess.query(Request).filter_by(id=request.id).update({'type': "Идёт"})
         elif request.approved == True and date >= request.date_end:
             db_sess.query(Request).filter_by(id=request.id).update({'type': "Завершён"})
     db_sess.commit()
@@ -75,6 +77,20 @@ def load_user(user_id):
 def logout():
     logout_user()
     return redirect("/")
+
+
+@app.route('/Unconfirm_request/<int:id_item>', methods=['GET', 'POST'])
+@login_required
+def Unconfirm_item(id_item):
+    db_sess = db_session.create_session()
+    item = db_sess.query(Request).filter(Request.id == id_item).first()
+    if item:
+        db_sess.delete(item)
+        db_sess.commit()
+        update_requests(db_sess)
+    else:
+        abort(404)
+    return redirect('/arrended')
 
 
 @app.route('/delete_item/<int:id_item>', methods=['GET', 'POST'])
@@ -111,7 +127,7 @@ def edit_news(id_item):
     item = db_sess.query(Asortiment).filter_by(id=id_item).first()
     form = RequestForm()
     if form.validate_on_submit():
-        if Check_free(form.datetime_start.data, form.datetime_end.data) == True:
+        if Check_free(form.datetime_start.data, form.datetime_end.data, id_item) == True:
             request = Request(id_item=id_item,
                               id_user=current_user.id,
                               user=db_sess.query(Users).filter_by(id=current_user.id).one(),

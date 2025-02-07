@@ -15,7 +15,7 @@ class Users(SqlAlchemyBase, UserMixin):
     about = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     email = sqlalchemy.Column(sqlalchemy.String, index=True, unique=True, nullable=True)
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    user_access = sqlalchemy.Column(sqlalchemy.String, default='admin', nullable=True)
+    user_access = sqlalchemy.Column(sqlalchemy.String, default='User', nullable=True)
     password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     asortiment = orm.relationship("Asortiment", back_populates='users')
 
