@@ -3,39 +3,44 @@
 {% block content %}
 <div class="container">
     <div class="container form-container">
-        <h1 class="text-center">Аренда предмета</h1>
+        <h1 class="text-center botind">Аренда предмета</h1>
 
-       <div class="text-center mb-4">
-           <img src="/{{ item.photo_href }}">
-        <div>
-            {{ item.name }}
-        </div>
-        <div>
-            <p>Описание товара: {{  item.idtype.description }} </p>
-        </div>
-        <form method="POST">
-            {{ form.hidden_tag() }}
-            <div class="descp">
-                <div class="mb-3 datal padr">
-                    {{ form.datetime_start.label(class="form-label") }}
-                    {{ form.datetime_start(class="form-control") }}
+       <div class="mb-4">
+            <div class="iteml">
+                <img class="imgadsize borderG" src="/{{ item.photo_href }}">
+            </div>
+            <div class="itemr">
+                <div>
+                    <h2 class="cental botind">{{ item.name }}</h2>
                 </div>
-                <div class="mb-3 datar padr">
-                    {{ form.datetime_end.label(class="form-label") }}
-                    {{ form.datetime_end(class="form-control") }}
+                <div>
+                    <h6 class="botind">Описание товара: {{  item.idtype.description }} </h6>
                 </div>
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    <div class="descp">
+                        <div class="mb-3 datal padr">
+                            <h6>{{ form.datetime_start.label(class="form-label") }}</h6>
+                            {{ form.datetime_start(class="form-control") }}
+                        </div>
+                        <div class="mb-3 datar padr">
+                            <h6>{{ form.datetime_end.label(class="form-label") }}</h6>
+                            {{ form.datetime_end(class="form-control") }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <h3>{{ form.description.label(class="form-label") }}</h3>
+                        {{ form.description(class="form-control") }}
+                    </div>
+                    <div class="text-center">
+                        {{ form.submit(type="submit", class="btn btn-success") }}
+                    </div>
+                    <div>
+                    {{ message }}
+                    </div>
+                </form>
             </div>
-            <div class="mb-3">
-                {{ form.description.label(class="form-label") }}
-                {{ form.description(class="form-control") }}
-            </div>
-            <div class="text-center">
-                {{ form.submit(type="submit", class="btn btn-success") }}
-            </div>
-            <div>
-            {{ message }}
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 {% endblock %}

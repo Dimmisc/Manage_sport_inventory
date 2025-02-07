@@ -1,14 +1,14 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
-from wtforms import StringField, TextAreaField, BooleanField, SubmitField, IntegerField, DateField
+from wtforms import StringField, TextAreaField, BooleanField, SubmitField, DateField, SelectField
 from wtforms.validators import DataRequired
 
 
 class AsortimentForm(FlaskForm):
+    choces = [["Nonwdwe", "Nonwdwe"]]
     name = StringField('Название', validators=[DataRequired()])
     status = StringField('Состояние')
-    type = StringField('Объект')
-    # content = TextAreaField("Содержание")
+    type = SelectField('Объект', choices=choces)
     photo = FileField('Изображение')
     submit = SubmitField("Добавить")
 

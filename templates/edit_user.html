@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container">
-    <h1>Редактирование предмета</h1>
+    <h1>Изменение пользователя:</h1>
         <form action="" method="post" enctype="multipart/form-data">
             <h1>{{ user.name }}</h1>
             <div>
@@ -27,7 +27,7 @@
                         <h4>{{ form.access.label }}</h4>
                     </div>
                     <div>
-                        {{ form.access(class="selectf", choices=choises) }}
+                        {{ form.access(class="selectf") }}
                     </div>
                     <div>
                         {% for error in form.access.errors %}

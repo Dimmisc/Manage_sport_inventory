@@ -1,13 +1,13 @@
+from datetime import datetime as dt
 import os
 from flask import Flask, render_template, redirect, request, abort
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.utils import secure_filename
 from forms.news import AsortimentForm, RequestForm, IdtypeForm
-from forms.user import RegisterForm, LoginForm
+from forms.user import RegisterForm, LoginForm, EU, IU
 from data.news import Asortiment, Request
 from data.category import Idtype
 from data.users import Users
-from sqlalchemy.orm import Session
 from sqlalchemy import create_engine
 from data import db_session
 
@@ -29,12 +29,24 @@ def Check_free(date_start, date_end):
     dates = db_sess.query(Request).all()
     if dates:
         for p in dates:
-            if date_start > p.date_start and date_start < p.date_end and date_end < p.date_end and date_end > p.date_start:
+            if date_start >= p.date_start and date_start <= p.date_end and date_end <= p.date_end and date_end >= p.date_start:
                 return False
-            if date_start < p.date_start and date_start < p.date_end and date_end < p.date_end and date_end > p.date_start:
+            if date_start <= p.date_start and date_start <= p.date_end and date_end <= p.date_end and date_end >= p.date_start:
                 return False
-            if date_start > p.date_start and date_start < p.date_end and date_end > p.date_end and date_end > p.date_start:
+            if date_start >= p.date_start and date_start <= p.date_end and date_end >= p.date_end and date_end >= p.date_start:
                 return False
+    return True
+
+
+def check_out(db_sess):
+    requests = db_sess.query(Request).all()
+    date = str(dt.today()).split()[0]
+    for request in requests:
+        if request.approved == False and date >= request.date_start:
+            db_sess.delete(request)
+        elif request.approved == True and date >= request.date_end:
+            db_sess.query(Request).filter_by(id=request.id).update({'type': "Завершён"})
+    db_sess.commit()
     return True
 
 
@@ -79,28 +91,39 @@ def delete_item(id_item):
     return redirect('/admin_panel')
 
 
+@app.route("/unconfirm_request<int:id_request>")
+@login_required
+def unconfirm_request(id_request):
+    db_sess = db_session.create_session()
+    item = db_sess.query(Request).filter_by(id=id_request).first()
+    if item:
+        db_sess.delete(item)
+        db_sess.commit()
+        update_requests(db_sess)
+    else:
+        abort(404)
+    return redirect("/arrended")
+
 @app.route('/request/<int:id_item>', methods=['GET', 'POST'])
 @login_required
 def edit_news(id_item):
     db_sess = db_session.create_session()
     item = db_sess.query(Asortiment).filter_by(id=id_item).first()
     form = RequestForm()
-    print(form, item)
     if form.validate_on_submit():
         if Check_free(form.datetime_start.data, form.datetime_end.data) == True:
-            print("notsome")
             request = Request(id_item=id_item,
                               id_user=current_user.id,
                               user=db_sess.query(Users).filter_by(id=current_user.id).one(),
                               date_start=str(form.datetime_start.data),
                               date_end=str(form.datetime_end.data),
-                              description="None"
+                              description=form.description.data,
+                              type="Не одобрен"
                               )
             db_sess.add(request)
             db_sess.commit()
             return redirect("/")
         else:
-            print("some")
             return render_template("request.html",
                                    form=form,
                                    item=item,
@@ -117,6 +140,7 @@ def edit_news(id_item):
 @app.route("/")
 def index():
     db_sess = db_session.create_session()
+    check_out(db_sess)
     if current_user.is_authenticated:
         user = db_sess.query(Users).filter_by(id=current_user.id).first()
         item = db_sess.query(Asortiment).all()
@@ -167,15 +191,12 @@ def admin_panel():
 @login_required
 def edit_item(id_item):
     db_sess = db_session.create_session()
-    form = AsortimentForm()
+    form = IU()
     if form.validate_on_submit():
-        print(form.status.data, form.name.data)
-        db_sess.query(Asortiment).filter_by(id=id_item).update({'name': form.name.data, 'status':form.status.data})
+        db_sess.query(Asortiment).filter(Asortiment.id == id_item).update({'name': form.name.data, 'status': form.status.data})
         db_sess.commit()
         return redirect("/admin_panel")
     item = db_sess.query(Asortiment).filter_by(id=id_item).first()
-    form.name.data = item.name
-    form.status.data = item.status
     return render_template("edit_item.html",
                            title="Редактирование предмета",
                            form=form,
@@ -187,10 +208,11 @@ def edit_item(id_item):
 @login_required
 def add_item():
     form = AsortimentForm()
-    print(False)
+    db_sess = db_session.create_session()
+    types = db_sess.query(Idtype.name).all()
+    choices = [[types[i][0], types[i][0]] for i in range(len(types))] 
+    form.type.choices = choices
     if form.validate_on_submit():
-        print(True)
-        db_sess = db_session.create_session()
         item = Asortiment()
         item.name = form.name.data
         item.status = form.status.data
@@ -227,26 +249,19 @@ def add_type():
 @app.route("/edit_user/<int:id_user>", methods=["GET", "POST"])
 @login_required
 def edit_user(id_user):
-    form = LoginForm()
     db_sess = db_session.create_session()
-    user = db_sess.query(Users).filter_by(id=id_user).first()
-    types = db_sess.query(Idtype.name).all()
-    print([(types[i][0], types[i][0]) for i in range(len(types))] ,len(types))
-    choices = [[types[i][0], types[i][0]] for i in range(len(types))]
-    form.choces = choices
-    form.email.data = user.email
-    form.password.data = 'd'
+    user = db_sess.query(Users).filter_by(id=id_user).first()  
+    form = EU()
     if form.validate_on_submit():
-        print(form.access.data)
         db_sess.query(Users).filter_by(id=id_user).update({'user_access': form.access.data,
                                                           'about': form.status.data}, 
                                                           )
         db_sess.commit()
         return redirect("/admin_panel")
-    
-    form.access.data = user.user_access
-    form.status.data = user.about
-    return render_template("edit_user.html", form=form, user=user, title="Изменение пользователя")
+    return render_template("edit_user.html", 
+                           form=form, 
+                           user=user, 
+                           title="Изменение пользователя")
 
 
 @app.route("/confirm_request/<int:id_request>", methods=["GET", "POST"])
@@ -255,9 +270,16 @@ def confirm_request(id_request):
     form = RequestForm()
     db_sess = db_session.create_session()
     if form.validate_on_submit():
-        db_sess.query(Request).filter_by(id=id_request).update({'description': form.description.data,
-                                                               'approved': form.confirmed.data},
-                                                               )
+        if form.confirmed.data == True:
+            db_sess.query(Request).filter_by(id=id_request).update({'description': form.description.data,
+                                                                   'approved': form.confirmed.data,
+                                                                   'type': 'Одобрен'}
+                                                                   )
+        else:
+            db_sess.query(Request).filter_by(id=id_request).update({'description': form.description.data,
+                                                                   'approved': form.confirmed.data,
+                                                                   'type': 'Не одобрен'}
+                                                                   )
         db_sess.commit()
         return redirect("/admin_panel")
     request = db_sess.query(Request).filter_by(id=id_request).first()

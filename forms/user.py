@@ -14,11 +14,21 @@ class RegisterForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
-    choces = [["Nonwdwe", "Nonwdwe"]]
     name = StringField("Имя")
     email = EmailField('Почта', validators=[DataRequired()])
     password = PasswordField('Пароль', validators=[DataRequired()])
-    access = SelectField('Доступ', choices=choces, validators=[DataRequired()])
     remember_me = BooleanField('Запомнить меня')
     status = StringField("Статус")
     submit = SubmitField('Войти')
+
+class EU(FlaskForm):
+    choces = [["User", "User"], ["admin", "admin"], ["baned", "baned"]]
+    status = StringField("Cтатус")
+    access = SelectField('Доступ', choices=choces)
+    submit = SubmitField('Изменить')
+
+class IU(FlaskForm):
+    choces = [["Nonwdwe", "Nonwdwe"]]
+    name = StringField('Название', validators=[DataRequired()])
+    status = StringField('Состояние')
+    submit = SubmitField("Добавить")

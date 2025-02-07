@@ -1,17 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Предметы</h1>
+    <h1>Арендованые предметы</h1>
     {% if trtp != 0 %}
     {% for request in items %}
     <div class="itemMy">
-        <div class="itemn">
+        <div class="itemn polosaty">
             <div class="itemll">
                 <img class="imgsize" src="/{{ request.asortiment.photo_href }}">
             </div>
             <div class="itemrr">
                 <div>
                     <h2 class="paing">{{ request.asortiment.name }}</h2>
+                    <h5 class="paing">{{ request.type }}</h5>
                     <h2><a class="borderG backcolor" href="/Unconfirm_request/{{ request.asortiment.id }}">Отмена аренды</a></h2>
                 </div>
             </div>
@@ -19,6 +20,6 @@
     </div>
     {% endfor %}
     {% else %}
-    <h1>Предметов нет!</h1>
+    <h1>Арендованых предметов нет!</h1>
     {% endif %}
 {% endblock %}
