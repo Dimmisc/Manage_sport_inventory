@@ -38,6 +38,15 @@ def Check_free(date_start, date_end):
     return True
 
 
+def update_requests(db_sess):
+    items = db_sess.query(Request).all()
+    for item in items:
+        if item.asortiment == None:
+            db_sess.delete(item)
+    db_sess.commit()
+    return True
+
+
 def main():
     db_session.global_init("db/blogs.db")
     app.run(debug=True)
@@ -64,6 +73,7 @@ def delete_item(id_item):
     if item:
         db_sess.delete(item)
         db_sess.commit()
+        update_requests(db_sess)
     else:
         abort(404)
     return redirect('/admin_panel')
@@ -113,7 +123,11 @@ def index():
     else:
         item = db_sess.query(Asortiment).all()
         user = None
-    return render_template("index.html", news=item, user=user, title="Главная")
+    return render_template("index.html", 
+                           news=item, 
+                           user=user, 
+                           title="Главная"
+                           )
 
 
 @app.route("/arrended")
@@ -122,7 +136,11 @@ def arrended():
     db_sess = db_session.create_session()
     items = db_sess.query(Request).filter_by(id_user=current_user.id).all()
     trtp = len(items) != 0
-    return render_template("arrended.html", items=items, trtp=trtp, title="Ваши арендованые предметы")
+    return render_template("arrended.html",
+                           items=items,
+                           trtp=trtp,
+                           title="Ваши арендованые предметы"
+                           )
 
 
 @app.route("/admin_panel")
@@ -134,7 +152,13 @@ def admin_panel():
         requests = db_sess.query(Request).all()
         users = db_sess.query(Users).all()
         types = db_sess.query(Idtype).all()
-        return render_template("admin_panel.html", items=items, requests=requests, types=types, users=users, title="Управление сайтом")
+        return render_template("admin_panel.html", 
+                               items=items, 
+                               requests=requests, 
+                               types=types, 
+                               users=users, 
+                               title="Управление сайтом"
+                               )
     else:
         return redirect("/")
 
@@ -144,13 +168,14 @@ def admin_panel():
 def edit_item(id_item):
     db_sess = db_session.create_session()
     form = AsortimentForm()
+    if form.validate_on_submit():
+        print(form.status.data, form.name.data)
+        db_sess.query(Asortiment).filter_by(id=id_item).update({'name': form.name.data, 'status':form.status.data})
+        db_sess.commit()
+        return redirect("/admin_panel")
     item = db_sess.query(Asortiment).filter_by(id=id_item).first()
     form.name.data = item.name
     form.status.data = item.status
-    if form.validate_on_submit():
-        db_sess.query(Asortiment).filter_by(id=id_item).update({'name': form.name.data, 'status':form.status.data}, synchronize_session='fetch')
-        db_sess.commit()
-        return redirect("/admin_panel")
     return render_template("edit_item.html",
                            title="Редактирование предмета",
                            form=form,
@@ -205,15 +230,22 @@ def edit_user(id_user):
     form = LoginForm()
     db_sess = db_session.create_session()
     user = db_sess.query(Users).filter_by(id=id_user).first()
-    form.access.data = user.user_access
-    form.status.data = user.about
+    types = db_sess.query(Idtype.name).all()
+    print([(types[i][0], types[i][0]) for i in range(len(types))] ,len(types))
+    choices = [[types[i][0], types[i][0]] for i in range(len(types))]
+    form.choces = choices
+    form.email.data = user.email
+    form.password.data = 'd'
     if form.validate_on_submit():
+        print(form.access.data)
         db_sess.query(Users).filter_by(id=id_user).update({'user_access': form.access.data,
                                                           'about': form.status.data}, 
-                                                          synchronize_session='fetch'
                                                           )
-        
+        db_sess.commit()
         return redirect("/admin_panel")
+    
+    form.access.data = user.user_access
+    form.status.data = user.about
     return render_template("edit_user.html", form=form, user=user, title="Изменение пользователя")
 
 
@@ -222,16 +254,20 @@ def edit_user(id_user):
 def confirm_request(id_request):
     form = RequestForm()
     db_sess = db_session.create_session()
-    request = db_sess.query(Request).filter_by(id=id_request).first()
-    form.description.data = request.description
     if form.validate_on_submit():
         db_sess.query(Request).filter_by(id=id_request).update({'description': form.description.data,
                                                                'approved': form.confirmed.data},
-                                                               synchronize_session='fetch'
                                                                )
         db_sess.commit()
         return redirect("/admin_panel")
-    return render_template("confirm_request.html", form=form, request=request, title="Одобрение запроса")
+    request = db_sess.query(Request).filter_by(id=id_request).first()
+    form.description.data = request.description
+    form.confirmed.data = request.approved
+    return render_template("confirm_request.html",
+                           form=form, 
+                           request=request, 
+                           title="Одобрение запроса"
+                           )
 
 
 @app.route('/register', methods=['GET', 'POST'])

@@ -22,11 +22,11 @@ h1 {
     float: right;
 }
 .borderR {
-    border: 5px solid darkred;
+    border: 5px solid #0099cc;
     border-radius: 10px;
 }
 .borderV {
-    border: 5px solid violet;
+    border: 5px solid #000000;
     border-radius: 10px;
 }
 .borderG {  
@@ -34,11 +34,11 @@ h1 {
     border-radius: 10px;
 }
 .borderY {
-    border: 5px solid yellow;
+    border: 5px solid #878787;
     border-radius: 10px;
 }
 .borderSome {
-    border: 5px solid blueviolet;
+    border: 5px solid #000000;
 }
 .cental {
     text-align: center;
@@ -63,7 +63,7 @@ h1 {
 }
 .itemll {
     float: left;
-    width: 33%;
+    width: 35%;
 }
 .itemr {
     float: right;
@@ -71,7 +71,7 @@ h1 {
 }
 .itemrr {
     float: right;
-    width: 67%;
+    width: 65%;
 }
 .imgsize {
     height: 100px;
@@ -86,7 +86,7 @@ h1 {
     color: white;
 }
 .backcolorV {
-    background-color: blueviolet;
+    background-color: #ffffff;
     color: white;
 }
 .backcolorV:hover {
@@ -129,9 +129,14 @@ h1 {
 .polosaty {
     background: repeating-linear-gradient(
   45deg,
-  #6bbc60,
-  #6bbc60 10px,
-  #9bbc46 10px,
-  #9bbc46 20px
+  #33ccff,
+  #33ccff 10px,
+  #a8d9ff 10px,
+  #a8d9ff 20px
 );
+}
+.selectf {
+    height: 60px;
+    width: 200px;
+    font-size: 30px;
 }

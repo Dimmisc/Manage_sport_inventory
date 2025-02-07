@@ -2,50 +2,44 @@
 
 {% block content %}
 <div class="container">
-    <h1>Изменение пользователя</h1>
-    <div>
-        <div>
-            <h1>{{ user.name }}</h1>
-        </div>
+    <h1>Редактирование предмета</h1>
         <form action="" method="post" enctype="multipart/form-data">
-        {{ form.hidden_tag() }}
-        <div>
+            <h1>{{ user.name }}</h1>
             <div>
-                {{ form.status.label }}
-            </div>
-            <div>
-                {{ form.status(class="form-control") }}
-            </div>
-            <div>
-                {% for error in form.name.errors %}
-                <div class="alert alert-danger" role="alert">
-                    {{ error }}
+                {{ form.hidden_tag() }}
+                <div>
+                    <div class="paing">
+                        <h4>{{ form.status.label }}</h4>
+                    </div>
+                    <div>
+                        {{ form.status(class="form-control") }}
+                    </div>
+                    <div>
+                        {% for error in form.status.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
-                {% endfor %}
-            </div>
-        </div>
-        <div>
-            <div>
-                {{ form.access.label }}
-            </div>
-            <div>
-                {{ form.access(class="form-control") }}
-            </div>
-            <div>
-                {% for error in form.access.errors %}
-                <div class="alert alert-danger" role="alert">
-                    {{ error }}
+                <div>
+                    <div class="paing">
+                        <h4>{{ form.access.label }}</h4>
+                    </div>
+                    <div>
+                        {{ form.access(class="selectf", choices=choises) }}
+                    </div>
+                    <div>
+                        {% for error in form.access.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
-                {% endfor %}
+                 <div class="cental paing">{{ form.submit(type="submit", class="btn btn-primary", value="Изменить") }}</div>
+                <p>{{ message }}</p>
             </div>
-        </div>
-        <p>
-            {{ form.submit(type="submit", class="btn btn-primary") }}
-        </p>
-        <p>
-            {{ message }}
-        </p>
         </form>
-    </div>
 </div>
 {% endblock %}

@@ -3,16 +3,16 @@
 {% block content %}
 <div class="container">
     <h1>Редактирование предмета</h1>
-    <div>
+    <div class="iteml">
         <img class="imgadsize borderG" src="/{{ item.photo_href }}">
     </div>
-    <div>
+    <div class="itemr">
         <form action="" method="post" enctype="multipart/form-data">
             <div>
                 {{ form.hidden_tag() }}
                 <div>
-                    <div>
-                        {{ form.name.label }}
+                    <div class="paing">
+                        <h4>{{ form.name.label }}</h4>
                     </div>
                     <div>
                         {{ form.name(class="form-control") }}
@@ -26,13 +26,13 @@
                     </div>
                 </div>
                 <div>
-                    <div>
-                        Описание: {{ item.idtype.description }}
+                    <div class="paing">
+                        <h5>Описание: {{ item.idtype.description }}</h5>
                     </div>
                 </div>
                 <div>
-                    <div>
-                        {{ form.status.label }}
+                    <div class="paing">
+                        <h4>{{ form.status.label }}</h4>
                     </div>
                     <div>
                         {{ form.status(class="form-control") }}
@@ -45,7 +45,7 @@
                         {% endfor %}
                     </div>
                 </div>
-                <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+                 <div class="cental paing"><p>{{ form.submit(type="submit", class="btn btn-primary", value="Изменить") }}</p></div>
                 <p>{{ message }}</p>
             </div>
         </form>
