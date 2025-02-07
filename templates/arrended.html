@@ -17,10 +17,15 @@
             </div>
             <div class="itemrr">
                 <div>
-                    <h2 class="paing">{{ request.asortiment.name }}</h2>
-                    <h5 class="paing">{{ request.type }}</h5>
+                    <h3 class="paing">{{ request.asortiment.name }}</h3>
                     {% if request.type == 'Не одобрен' or  request.type == 'Одобрен' %}
-                    <a class="borderG backcolor" href="/Unconfirm_request/{{ request.id }}">Отмена аренды</a>
+                    <div class="szt cental">{{ request.type }}</div>
+                    <div class="paing szzt">С: {{ request.date_start }} до: {{ request.date_end }}</div>
+                    <div class="cental"><a class="borderG backcolor szt" href="/Unconfirm_request/{{ request.id }}">Отмена аренды</a></div>
+                    {% elif request.type == "Идёт"%}
+                    <div class="szt cental paing">Статус: {{ request.type }}; до {{ request.date_end }}</div>
+                    {% else %}
+                    <h2 class="paing">Статус: {{ request.type }}</h2>
                     {% endif %}
                 </div>
             </div>

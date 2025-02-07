@@ -146,16 +146,16 @@ h1 {
   #ff6161 20px
 );}
 .stolbikG {
-    background: repeating-linear-gradient(
-  90deg,
-  #4dff4d,
-  #4dff4d 10px,
-  #80ff80 10px,
-  #80ff80 20px
-);
+    background-color: rgb(69, 128, 69);
 }
 .selectf {
     height: 60px;
     width: 200px;
     font-size: 30px;
+}
+.szt {
+    font-size: 22px;
+}
+.szzt {
+    font-size: 20px;
 }

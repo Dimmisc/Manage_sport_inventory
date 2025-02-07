@@ -41,13 +41,16 @@ def Check_free(date_start, date_end, id):
 def check_out(db_sess):
     requests = db_sess.query(Request).all()
     date = str(dt.today()).split()[0]
+    
     for request in requests:
+        print(date, request.date_end, date >= request.date_end)
         if request.approved == False and date >= request.date_start:
             db_sess.delete(request)
         elif request.approved == True and date >= request.date_start:
-            db_sess.query(Request).filter_by(id=request.id).update({'type': "Идёт"})
-        elif request.approved == True and date >= request.date_end:
-            db_sess.query(Request).filter_by(id=request.id).update({'type': "Завершён"})
+            if request.approved == True and date >= request.date_end:
+                db_sess.query(Request).filter_by(id=request.id).update({'type': "Завершён"})
+            else:
+                db_sess.query(Request).filter_by(id=request.id).update({'type': "Идёт"})
     db_sess.commit()
     return True
 
