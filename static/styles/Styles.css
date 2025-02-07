@@ -138,9 +138,17 @@ h1 {
 .polosatyR {
     background: repeating-linear-gradient(
   45deg,
-  #33ccff,
-  #33ccff 10px,
-  #a8d9ff 10px,
-  #a8d9ff 20px
+  #ff2e2e,
+  #ff2e2e 10px,
+  #ff6161 10px,
+  #ff6161 20px
+);}
+.stolbikG {
+    background: repeating-linear-gradient(
+  90deg,
+  #4dff4d,
+  #4dff4d 10px,
+  #80ff80 10px,
+  #80ff80 20px
 );
 }
