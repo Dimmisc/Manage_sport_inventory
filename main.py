@@ -35,6 +35,8 @@ def Check_free(date_start, date_end, id):
                 return False
             if date_start >= p.date_start and date_start <= p.date_end and date_end >= p.date_end and date_end >= p.date_start:
                 return False
+    if date_start > date_end:
+        return False
     return True
 
 
@@ -48,7 +50,8 @@ def check_out(db_sess):
             db_sess.delete(request)
         elif request.approved == True and date >= request.date_start:
             if request.approved == True and date >= request.date_end:
-                db_sess.query(Request).filter_by(id=request.id).update({'type': "Завершён"})
+                if "Завершён" != request.type:
+                    db_sess.query(Request).filter_by(id=request.id).update({'type': "Завершён"})
             else:
                 db_sess.query(Request).filter_by(id=request.id).update({'type': "Идёт"})
     db_sess.commit()
@@ -84,7 +87,7 @@ def logout():
 
 @app.route('/Unconfirm_request/<int:id_request>', methods=['GET', 'POST'])
 @login_required
-def Unconfirm_item(id_request):
+def Unconfirm_request(id_request):
     if current_user.user_access == "baned":
         abort(404)
     else:
@@ -97,6 +100,25 @@ def Unconfirm_item(id_request):
         else:
             abort(404)
         return redirect('/arrended')
+
+
+@app.route("/report_request/<int:id_request>", methods=['GET', 'POST'])
+@login_required
+def report_request(id_request):
+    if current_user.user_access == "baned":
+        abort(404)
+    elif current_user.user_access == "User":
+        return redirect("/")
+    else:
+        form = RequestForm()
+        db_sess = db_session.create_session()
+        request = db_sess.query(Request).filter_by(id=id_request).first()
+        if form.validate_on_submit():
+            db_sess.query(Request).filter_by(id=id_request).update({'description': form.description.data,})
+            db_sess.commit()
+            print("soem")
+            return redirect("/admin_panel")
+        return render_template("reportR.html", form=form, request=request, title="Отзыв о аренде")
 
 
 @app.route('/delete_item/<int:id_item>', methods=['GET', 'POST'])
@@ -144,7 +166,7 @@ def edit_news(id_item):
                 return render_template("request.html",
                                     form=form,
                                     item=item,
-                                    message="Товар занят в указаное вами время!",
+                                    message="Товар занят в указаное вами время или вы указали неверно промежуток!",
                                     title="Аренда",
                                     )
         return render_template("request.html",
@@ -204,6 +226,9 @@ def admin_panel():
             requests = db_sess.query(Request).all()
             users = db_sess.query(Users).all()
             types = db_sess.query(Idtype).all()
+            for request in requests:
+                print(request.approved, request.type)
+                print(request.approved == False and request.type != "Идёт", request.type != "Идёт", request.type == "Завершён", request.type == "")
             return render_template("admin_panel.html", 
                                 items=items, 
                                 requests=requests, 

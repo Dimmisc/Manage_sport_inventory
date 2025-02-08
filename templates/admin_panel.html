@@ -68,14 +68,20 @@
                     <h2 class="cental">{{ request.id }}</h2>
                     <h3 class="cental">Пользователь: {{ request.user.name }}</h3>
                     <p class="cental">Start: {{request.date_start}} End: {{request.date_end}}</p>
-                    {% if request.approved == True %}
+                    {% if (request.type == "Завершён" and request.description == None) %}
                     <div class="cental">
-                        <a class="btn btn-success" href="/confirm_request/{{ request.id }}">Одобрено</a>
+                        <a class="btn btn-success" href="/report_request/{{ request.id }}">Отчёт</a>
                     </div>
-                    {% else %}
+                    {% elif (request.type == "Одобрен") %}
+                    <div class="cental">
+                        <a class="btn btn-success" href="/confirm_request/{{ request.id }}">Не одобрить</a>
+                    </div>
+                    {% elif (request.type == "Не одобрен") %}
                     <div class="cental">
                         <a class="btn btn-success" href="/confirm_request/{{ request.id }}">Одобрить</a>
                     </div>
+                    {% elif (request.type == "Завершён" and request.description != None) %}
+                    <h1 class="cental">Отчёт совершён</h1>
                     {% endif %}
                     
                 </div>

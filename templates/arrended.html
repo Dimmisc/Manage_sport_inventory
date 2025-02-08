@@ -22,11 +22,12 @@
                         {% if request.type == 'Не одобрен' or  request.type == 'Одобрен' %}
                         <div class="szt cental">{{ request.type }}</div>
                         <div class="paing szzt">С: {{ request.date_start }} до: {{ request.date_end }}</div>
-                        <div class="cental"><a class="borderG backcolor szt" href="/Unconfirm_request/{{ request.id }}">Отмена аренды</a></div>
+                        <div class="cental"><a class="btn exit" href="/Unconfirm_request/{{ request.id }}">Отмена аренды</a></div>
                         {% elif request.type == "Идёт"%}
                         <div class="szt cental paing">Статус: {{ request.type }}; до {{ request.date_end }}</div>
                         {% else %}
                         <h2 class="paing">Статус: {{ request.type }}</h2>
+                        <h5 class="paing">{{ request.description }}</h5>
                         {% endif %}
                     </div>
                 </div>

@@ -170,14 +170,14 @@ h1 {
         grid-auto-rows: minmax(20%, auto);
     }
 }
-@media (max-width: 2000px) {
+@media (max-width: 2600px) {
     .grates {
         grid-template-columns: repeat(5, 20%);
         display: grid;
         grid-auto-rows: minmax(20%, auto);
     }
 }
-@media (max-width: 1800px) {
+@media (max-width: 1900px) {
     .grates {
         grid-template-columns: repeat(4, 25%);
         display: grid;

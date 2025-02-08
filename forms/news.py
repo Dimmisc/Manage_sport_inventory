@@ -13,7 +13,7 @@ class AsortimentForm(FlaskForm):
     submit = SubmitField("Добавить")
 
 class RequestForm(FlaskForm):
-    description = TextAreaField('Причина аренды')
+    description = TextAreaField("Отчёт:")
     datetime_start = DateField('Начало аренды')
     datetime_end = DateField('Окончание аренды')
     confirmed = BooleanField('Одобрить?')

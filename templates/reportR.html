@@ -13,19 +13,14 @@
         <form action="" method="post" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
         <div>
-            <div class="cental">
-                <h2>Начало: {{ request.date_start }}; Окончание: {{ request.date_end }}</h2>
-            </div>
-            <div class="cental marg">
-                <div>
-                    <h1>{{ form.confirmed.label }}</h1>
-                </div>
-                <div>
-                    {{ form.confirmed(class="form-control") }}
-                </div>
+            <div>
+                <h1 class="cental">{{ form.description.label }}</h1>
             </div>
             <div>
-                {% for error in form.confirmed.errors %}
+                {{ form.description(class="form-control") }}
+            </div>
+            <div>
+                {% for error in form.description.errors %}
                 <div class="alert alert-danger" role="alert">
                     {{ error }}
                 </div>
