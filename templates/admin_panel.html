@@ -39,7 +39,11 @@
                         </div>
                     </div>
                     <p>{{ user.about }}</p>
+                    {% if user.id != current_user.id %}
                     <div class="cental" ><a class="btn btn-success" href="/edit_user/{{ user.id }}">Редактировать</a></div>
+                    {% else %}
+                        <h5 class="cental">Это вы</h5>
+                    {% endif %}
                 </div>
             </div>
             {% endfor %}
