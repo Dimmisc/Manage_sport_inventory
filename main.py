@@ -156,14 +156,14 @@ def edit_news(id_item):
 
 @app.route("/")
 def index():
-    if current_user.user_access == "baned":
-        abort(404)
-    else:
         db_sess = db_session.create_session()
         check_out(db_sess)
         if current_user.is_authenticated:
-            user = db_sess.query(Users).filter_by(id=current_user.id).first()
-            item = db_sess.query(Asortiment).all()
+            if current_user.user_access == "baned":
+                abort(404)
+            else:
+                user = db_sess.query(Users).filter_by(id=current_user.id).first()
+                item = db_sess.query(Asortiment).all()
         else:
             item = db_sess.query(Asortiment).all()
             user = None
