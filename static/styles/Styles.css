@@ -47,8 +47,6 @@ h1 {
     box-align: center;
 }
 .itemMy {
-    width: 25%;
-    float: left;
     padding: 5px;
 }
 .itemn {
@@ -75,11 +73,10 @@ h1 {
 }
 .imgsize {
     height: 125px;
-    height: 100px;
+    width: 140px;
 }
 .imgadsize {
-    height: 400px;
-    height: 400px;
+    width: 500px;
 }
 .backcolor {
     background-color: rgb(32, 116, 11);
@@ -158,4 +155,53 @@ h1 {
 }
 .szzt {
     font-size: 20px;
+}
+@media (max-width: 70000px) {
+    .grates {
+        grid-template-columns: repeat(8, 12.5%);
+        display: grid;
+        grid-auto-rows: minmax(20%, auto);
+    }
+}
+@media (max-width: 2800px) {
+    .grates {
+        grid-template-columns: repeat(6, 16.7%);
+        display: grid;
+        grid-auto-rows: minmax(20%, auto);
+    }
+}
+@media (max-width: 2000px) {
+    .grates {
+        grid-template-columns: repeat(5, 20%);
+        display: grid;
+        grid-auto-rows: minmax(20%, auto);
+    }
+}
+@media (max-width: 1800px) {
+    .grates {
+        grid-template-columns: repeat(4, 25%);
+        display: grid;
+        grid-auto-rows: minmax(20%, auto);
+    }
+}
+@media (max-width: 1540px) {
+    .grates {
+        grid-template-columns: repeat(3, 33%);
+        display: grid;
+        grid-auto-rows: minmax(20%, auto);
+    }
+}
+@media (max-width: 1150px) {
+    .grates {
+        grid-template-columns: repeat(2, 50%);
+        display: grid;
+        grid-auto-rows: minmax(20%, auto);
+    }
+}
+@media (max-width: 730px) {
+    .grates {
+        grid-template-columns: 100%;
+        display: grid;
+        grid-auto-rows: minmax(20%, auto);
+    }
 }

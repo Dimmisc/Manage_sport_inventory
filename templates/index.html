@@ -2,19 +2,21 @@
 
 {% block content %}
     <h1>Предметы</h1>
+    <div class="grates">
     {% for item in news %}
-    <div class="itemMy">
-        <div class="itemn">
-            <div class="itemll">
-                <img class="imgsize" src="/{{ item.photo_href }}">
-            </div>
-            <div class="itemrr">
-                <div>
-                    <h2 class="cental">{{ item.name }}</h2>
-                    <h2 class="cental"><a class="borderG backcolor" href="/request/{{ item.id }}">Арендовать</a></h2>
+        <div class="itemMy">
+            <div class="itemn">
+                <div class="itemll">
+                    <img class="imgsize" src="/{{ item.photo_href }}">
+                </div>
+                <div class="itemrr">
+                    <div>
+                        <h2 class="cental">{{ item.name }}</h2>
+                        <h2 class="cental"><a class="borderG backcolor" href="/request/{{ item.id }}">Арендовать</a></h2>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     {% endfor %}
+    </div>
 {% endblock %}

@@ -230,6 +230,8 @@ def edit_item(id_item):
             db_sess.commit()
             return redirect("/admin_panel")
         item = db_sess.query(Asortiment).filter_by(id=id_item).first()
+        form.name.data = item.name
+        form.status.data = item.status
         return render_template("edit_item.html",
                             title="Редактирование предмета",
                             form=form,

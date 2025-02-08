@@ -3,35 +3,37 @@
 {% block content %}
     <h1>Арендованые предметы</h1>
     {% if trtp != 0 %}
-    {% for request in items %}
-    <div class="itemMy">
-        {% if request.type == 'Не одобрен' %}
-        <div class="itemn polosatyR">
-        {% elif request.type == 'Одобрен' or request.type == "Идёт" %}
-        <div class="itemn stolbikG">
-        {% elif request.type == 'Завершён' %}
-        <div class="itemn polosaty">
-        {% endif %}
-            <div class="itemll">
-                <img class="imgsize" src="/{{ request.asortiment.photo_href }}">
-            </div>
-            <div class="itemrr">
-                <div>
-                    <h3 class="paing">{{ request.asortiment.name }}</h3>
-                    {% if request.type == 'Не одобрен' or  request.type == 'Одобрен' %}
-                    <div class="szt cental">{{ request.type }}</div>
-                    <div class="paing szzt">С: {{ request.date_start }} до: {{ request.date_end }}</div>
-                    <div class="cental"><a class="borderG backcolor szt" href="/Unconfirm_request/{{ request.id }}">Отмена аренды</a></div>
-                    {% elif request.type == "Идёт"%}
-                    <div class="szt cental paing">Статус: {{ request.type }}; до {{ request.date_end }}</div>
-                    {% else %}
-                    <h2 class="paing">Статус: {{ request.type }}</h2>
-                    {% endif %}
+    <div class="grates">
+        {% for request in items %}
+        <div class="itemMy">
+            {% if request.type == 'Не одобрен' %}
+            <div class="itemn polosatyR">
+            {% elif request.type == 'Одобрен' or request.type == "Идёт" %}
+            <div class="itemn stolbikG">
+            {% elif request.type == 'Завершён' %}
+            <div class="itemn polosaty">
+            {% endif %}
+                <div class="itemll">
+                    <img class="imgsize" src="/{{ request.asortiment.photo_href }}">
+                </div>
+                <div class="itemrr">
+                    <div>
+                        <h3 class="paing">{{ request.asortiment.name }}</h3>
+                        {% if request.type == 'Не одобрен' or  request.type == 'Одобрен' %}
+                        <div class="szt cental">{{ request.type }}</div>
+                        <div class="paing szzt">С: {{ request.date_start }} до: {{ request.date_end }}</div>
+                        <div class="cental"><a class="borderG backcolor szt" href="/Unconfirm_request/{{ request.id }}">Отмена аренды</a></div>
+                        {% elif request.type == "Идёт"%}
+                        <div class="szt cental paing">Статус: {{ request.type }}; до {{ request.date_end }}</div>
+                        {% else %}
+                        <h2 class="paing">Статус: {{ request.type }}</h2>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
     {% else %}
     <h1>Арендованых предметов нет!</h1>
     {% endif %}
