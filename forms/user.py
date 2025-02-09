@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import PasswordField, StringField, TextAreaField, SubmitField, BooleanField, SelectField
+from wtforms import PasswordField, StringField, TextAreaField, SubmitField, BooleanField, SelectField, IntegerField, FloatField
 from wtforms.fields.simple import EmailField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, NumberRange
 
 
 class RegisterForm(FlaskForm):
@@ -32,3 +32,13 @@ class IU(FlaskForm):
     name = StringField('Название', validators=[DataRequired()])
     status = StringField('Состояние')
     submit = SubmitField("Добавить")
+
+class PurchasePlanForm(FlaskForm):
+    item_name = StringField('Название товара (если нет в ассортименте)')
+    
+    asortiment_id = SelectField('Товар из ассортимента', coerce=int, choices=[])
+    
+    quantity = IntegerField('Количество', validators=[DataRequired(), NumberRange(min=1)])
+    price = FloatField('Цена за единицу', validators=[DataRequired(), NumberRange(min=0)])
+    supplier = StringField('Поставщик', validators=[DataRequired()])
+    submit = SubmitField('Добавить в план закупок')

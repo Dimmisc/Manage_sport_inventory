@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>План закупок</h1>
+
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+             {{ form.asortiment_id.label }}<br>
+            {{ form.asortiment_id(class="form-control") }}
+        </div>
+        <div class="mb-3">
+            {{ form.item_name.label }}<br>
+            {{ form.item_name(class="form-control") }}
+            {% for error in form.item_name.errors %}
+                <div class="alert alert-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+       
+        <div class="mb-3">
+            {{ form.quantity.label }}<br>
+            {{ form.quantity(class="form-control") }}
+            {% for error in form.quantity.errors %}
+                <div class="alert alert-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="mb-3">
+            {{ form.price.label }}<br>
+            {{ form.price(class="form-control") }}
+            {% for error in form.price.errors %}
+                <div class="alert alert-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="mb-3">
+            {{ form.supplier.label }}<br>
+            {{ form.supplier(class="form-control") }}
+            {% for error in form.supplier.errors %}
+                <div class="alert alert-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+        {{ form.submit(class="btn btn-primary") }}
+         {{ message }}
+    </form>
+
+    <h2>Список позиций в плане</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Товар</th>
+                <th>Количество</th>
+                <th>Цена за шт.</th>
+                <th>Поставщик</th>
+                <th>Статус</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in plan_items %}
+            <tr>
+                <td>{{ item.id }}</td>
+                 <td>
+                    {% if item.asortiment %}
+                        {{ item.asortiment.name }}
+                    {% else %}
+                        {{ item.item_name }}
+                    {% endif %}
+                </td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.price }}</td>
+                <td>{{ item.supplier }}</td>
+                <td>{{item.status}}</td>
+                <td>
+                    <a href="{{ url_for('purchase_plan_edit', id=item.id) }}" class="btn btn-warning btn-sm">Изменить</a>
+                    <a href="{{ url_for('purchase_plan_delete', id=item.id) }}" class="btn btn-danger btn-sm">Удалить</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}  

@@ -4,8 +4,8 @@ from flask import Flask, render_template, redirect, request, abort
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.utils import secure_filename
 from forms.news import AsortimentForm, RequestForm, IdtypeForm
-from forms.user import RegisterForm, LoginForm, EU, IU
-from data.news import Asortiment, Request
+from forms.user import RegisterForm, LoginForm, EU, IU, PurchasePlanForm
+from data.news import Asortiment, Request, PurchasePlan
 from data.category import Idtype
 from data.users import Users
 from sqlalchemy import create_engine
@@ -190,26 +190,25 @@ def index():
             item = db_sess.query(Asortiment).all()
             user = None
         return render_template("index.html", 
-                            news=item, 
-                            user=user, 
-                            title="Главная"
-                            )
+                               news=item, 
+                               user=user, 
+                               title="Главная"
+                               )
 
 
 @app.route("/arrended")
 @login_required
 def arrended():
-    if current_user.user_access == "baned":
-        abort(404)
-    else:
-        db_sess = db_session.create_session()
-        items = db_sess.query(Request).filter_by(id_user=current_user.id).all()
-        trtp = len(items) != 0
-        return render_template("arrended.html",
-                            items=items,
-                            trtp=trtp,
-                            title="Ваши арендованые предметы"
-                            )
+    if current_user.user_access != "admin":
+        abort(403)
+    db_sess = db_session.create_session()
+    items = db_sess.query(Request).filter_by(id_user=current_user.id).all()
+    trtp = len(items) != 0
+    return render_template("arrended.html",
+                           items=items,
+                           trtp=trtp,
+                           title="Ваши арендованые предметы"
+                           )
 
 
 @app.route("/admin_panel")
@@ -240,11 +239,128 @@ def admin_panel():
             return redirect("/")
 
 
+@app.route('/purchase_plan', methods=['GET', 'POST'])
+@login_required
+def purchase_plan():
+    if current_user.user_access != "admin":
+        abort(403)
+
+    db_sess = db_session.create_session()
+    plan_items = db_sess.query(PurchasePlan).all()
+    form = PurchasePlanForm()
+    assortiments = db_sess.query(Asortiment).all()
+    form.asortiment_id.choices = [(0, "Нет в ассортименте")] + [(a.id, a.name) for a in assortiments]
+    if form.validate_on_submit():
+        if form.asortiment_id.data == 0:
+            if not form.item_name.data:
+                return render_template('purchase_plan.html',
+                                       title='План закупок',
+                                       form=form, 
+                                       plan_items=plan_items,
+                                       message="Укажите название товара"
+                                       )
+            new_plan_item = PurchasePlan(item_name = form.item_name.data,
+                                         quantity=form.quantity.data,
+                                         price=form.price.data,
+                                         supplier=form.supplier.data
+                                         )
+        else:
+            asortiment = db_sess.query(Asortiment).get(form.asortiment_id.data)
+            if not asortiment:
+                abort(404)
+            new_plan_item = PurchasePlan(asortiment_id=asortiment.id,
+                                         quantity=form.quantity.data,
+                                         price=form.price.data,
+                                         supplier=form.supplier.data
+                                         )
+            
+        db_sess.add(new_plan_item)
+        db_sess.commit()
+        return redirect('/purchase_plan')
+
+    return render_template('purchase_plan.html', title='План закупок', form=form, plan_items=plan_items)
+
+
+@app.route('/purchase_plan/delete/<int:id>', methods=['GET', 'POST'])
+@login_required
+def purchase_plan_delete(id):
+    if current_user.user_access != "admin":
+        abort(403)
+
+    db_sess = db_session.create_session()
+    plan_item = db_sess.query(PurchasePlan).get(id)
+    if not plan_item:
+        abort(404)
+
+    db_sess.delete(plan_item)
+    db_sess.commit()
+    return redirect('/purchase_plan')
+
+
+@app.route('/purchase_plan/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
+def purchase_plan_edit(id):
+     if current_user.user_access != "admin":
+        abort(403)
+     
+     db_sess = db_session.create_session()
+     plan_item = db_sess.query(PurchasePlan).get(id)
+
+     if not plan_item:
+        abort(404)
+     
+     form = PurchasePlanForm()
+
+     assortiments = db_sess.query(Asortiment).all()
+     form.asortiment_id.choices = [(0, "Нет в ассортименте")] + [(a.id, a.name) for a in assortiments]
+
+     if form.validate_on_submit():
+        if form.asortiment_id.data == 0:
+            if not form.item_name.data:
+                 return render_template('purchase_plan_edit.html', 
+                                        title='Редактирование плана закупок',
+                                        form=form,  
+                                        plan_item=plan_item,
+                                        message="Укажите название товара"
+                                        )
+            plan_item.item_name = form.item_name.data
+            plan_item.asortiment_id = None
+                
+        else:
+            plan_item.asortiment_id = form.asortiment_id.data
+            plan_item.item_name = None
+        
+        plan_item.quantity = form.quantity.data
+        plan_item.price = form.price.data
+        plan_item.supplier = form.supplier.data
+
+        db_sess.commit()
+        return redirect('/purchase_plan')
+
+     if request.method == "GET":
+
+        if plan_item.asortiment:
+             form.asortiment_id.data = plan_item.asortiment_id
+        else:
+             form.item_name.data = plan_item.item_name
+             form.asortiment_id.data = 0
+
+        form.quantity.data = plan_item.quantity
+        form.price.data = plan_item.price
+        form.supplier.data = plan_item.supplier
+    
+     return render_template('purchase_plan_edit.html', 
+                            title='Редактирование плана закупок', 
+                            form=form, 
+                            plan_item=plan_item
+                            )
+
+
 @app.route("/edit_item/<int:id_item>", methods=["GET", "POST"])
 @login_required
 def edit_item(id_item):
     if current_user.user_access == "baned":
-        abort(404)
+        abort(403)
     elif current_user.user_access == "User":
         return redirect("/")
     else:
@@ -268,7 +384,7 @@ def edit_item(id_item):
 @login_required
 def add_item():
     if current_user.user_access == "baned":
-        abort(404)
+        abort(403)
     elif current_user.user_access == "User":
         return redirect("/")
     else:
@@ -300,7 +416,7 @@ def add_item():
 @login_required
 def add_type():
     if current_user.user_access == "baned":
-        abort(404)
+        abort(403)
     elif current_user.user_access == "User":
         return redirect("/")
     else:
@@ -320,7 +436,7 @@ def add_type():
 @login_required
 def edit_user(id_user):
     if current_user.user_access == "baned":
-        abort(404)
+        abort(403)
     elif current_user.user_access == "User":
         return redirect("/")
     else:
@@ -344,7 +460,7 @@ def edit_user(id_user):
 @login_required
 def confirm_request(id_request):
     if current_user.user_access == "baned":
-        abort(404)
+        abort(403)
     elif current_user.user_access == "User":
         return redirect("/")
     else:

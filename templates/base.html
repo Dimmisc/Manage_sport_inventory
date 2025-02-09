@@ -21,6 +21,9 @@
         <div class="cental">
             <a href="/admin_panel" class="btn btn-primary">Администрирование</a>
         </div>
+        <div class="cental">
+            <a href="{{ url_for('purchase_plan') }}" class="btn btn-info">Перейти к плану закупок</a>
+        </div>
         {% else %}
         <div class="cental">
             <a href="/arrended" class="btn btn-primary">Арендование предметы</a>
