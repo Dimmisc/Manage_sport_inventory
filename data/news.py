@@ -28,7 +28,7 @@ class Request(SqlAlchemyBase):
     description = sqlalchemy.Column(sqlalchemy.String)
     date_start = sqlalchemy.Column(sqlalchemy.String)
     date_end = sqlalchemy.Column(sqlalchemy.String)
-    approved = sqlalchemy.Column(sqlalchemy.Boolean)
+    approved = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
     type = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
     id_user = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))

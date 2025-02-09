@@ -45,8 +45,9 @@ def check_out(db_sess):
     date = str(dt.today()).split()[0]
     
     for request in requests:
-        print(date, request.date_end, date >= request.date_end)
-        if request.approved == False and date >= request.date_start:
+        print("somne", request.approved, date, request.date_start, request.id)
+        if request.approved == False or request.approved == None and date >= request.date_start:
+
             db_sess.delete(request)
         elif request.approved == True and date >= request.date_start:
             if request.approved == True and date >= request.date_end:
