@@ -199,7 +199,7 @@ def index():
 @app.route("/arrended")
 @login_required
 def arrended():
-    if current_user.user_access != "admin":
+    if current_user.user_access == "baned":
         abort(403)
     db_sess = db_session.create_session()
     items = db_sess.query(Request).filter_by(id_user=current_user.id).all()
