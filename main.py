@@ -46,7 +46,7 @@ def check_out(db_sess):
     
     for request in requests:
         print("somne", request.approved, date, request.date_start, request.id)
-        if request.approved == False or request.approved == None and date >= request.date_start:
+        if (request.approved == False or request.approved == None) and date >= request.date_start:
 
             db_sess.delete(request)
         elif request.approved == True and date >= request.date_start:
